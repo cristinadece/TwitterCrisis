@@ -20,7 +20,7 @@ class TweetTextTokenizer:
                 try:
                     tweet = json.loads(line)
                 except:
-                    print "Couldn't parse tweet: ", line
+                    print "Couldn't parse tweet: ", line[:100]
 
                 tweetText = tweet['text']
                 tokenizedTweettext = [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]

@@ -14,7 +14,10 @@ We read JSON files from directory, get the text, tokenize it and compute WordCou
 def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
     wordcount = defaultdict(int)
     output = open(outputfile, 'w')
+    i=0
     for tweet in tweets:
+        if i%10000==0:
+            print 'processing tweets: '
         tokenList = [t for t in tweet if len(t) > 2]
         if ngram>1:
             for ng in range(1,ngram):
