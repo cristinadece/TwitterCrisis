@@ -16,8 +16,9 @@ def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
     output = open(outputfile, 'w')
     i=0
     for tweet in tweets:
+        i+=1
         if i%10000==0:
-            print 'processing tweets: '
+            print 'processing tweets: ', i
         tokenList = [t for t in tweet if len(t) > 2]
         if ngram>1:
             for ng in range(1,ngram):
