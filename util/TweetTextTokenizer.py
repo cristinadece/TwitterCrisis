@@ -2,8 +2,6 @@
 import gzip
 import json
 import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tokenizer import twokenize
 
 stopwords=open('../resources/stop-word-list.txt', 'r').read().decode('utf-8').split('\r\n')

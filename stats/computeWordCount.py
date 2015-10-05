@@ -3,8 +3,9 @@ __author__ = 'cris'
 import sys
 from collections import defaultdict
 import operator
-
-from util.TweetTextTokenizer import TweetTextTokenizer
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from util import TweetTextTokenizer
 from util import ngrams
 
 '''
@@ -45,7 +46,7 @@ if __name__ == '__main__':
         sys.exit(-1)
     tweetDir = sys.argv[1]
     output = sys.argv[2]
-    tweetsAsTokens = TweetTextTokenizer(tweetDir)
+    tweetsAsTokens = TweetTextTokenizer.TweetTextTokenizer(tweetDir)
 
     wordcountPlain(tweetsAsTokens, output, False, 2)
 
