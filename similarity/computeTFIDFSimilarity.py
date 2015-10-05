@@ -1,8 +1,11 @@
 __author__ = 'cris'
 
 import sys
-from TweetTextTokenizer import TweetTextTokenizer
+
 from gensim import corpora
+
+from util.TweetTextTokenizer import TweetTextTokenizer
+
 
 def tfidsWithGensim(tweets):
 

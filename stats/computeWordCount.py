@@ -1,9 +1,10 @@
 __author__ = 'cris'
 
 import sys
-from TweetTextTokenizer import TweetTextTokenizer
 from collections import defaultdict
 import operator
+
+from util.TweetTextTokenizer import TweetTextTokenizer
 from util import ngrams
 
 '''
@@ -22,14 +23,17 @@ def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
         tokenList = [t for t in tweet if len(t) > 2]
         if ngram>1:
             for ng in range(1,ngram):
-                tokenList = tokenList + [ntoken for ntoken in ngrams.window(tweet, ng+1)]
+                tokenList = tokenList + [ntoken for ntoken in ngrams.window_no_twitter_elems(tweet, ng+1)]
 
         for token in tokenList: # len(token) > 2
-            if onlyHashtags and token.startswith('#'):
+            if onlyHashtags:
+                if token.startswith('#'):
                     wordcount[token] += 1
+                else:
+                    continue
             else:
                 wordcount[token] += 1
-    print "Total words" , len(wordcount)
+    print "Total words" , len(wordcount), wordcount
     sorted_wc = sorted(wordcount.items(), key=operator.itemgetter(1), reverse=True)
     for k,v in sorted_wc:
         output.write(u'{}\t{}\n'.format(k,v).encode('utf-8'))
@@ -43,6 +47,6 @@ if __name__ == '__main__':
     output = sys.argv[2]
     tweetsAsTokens = TweetTextTokenizer(tweetDir)
 
-    wordcountPlain(tweetsAsTokens, output, True, 1)
+    wordcountPlain(tweetsAsTokens, output, False, 2)
 
 
