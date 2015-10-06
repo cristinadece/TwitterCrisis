@@ -21,7 +21,7 @@ def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
         i+=1
         if i%10000==0:
             print 'processing tweets: ', i
-        tokenList = [t for t in tweet if len(t) > 2]
+        tokenList = [t for t in tweet if (len(t) > 2 and (not ngrams.is_url_or_mention(t)))]
         if ngram>1:
             for ng in range(1,ngram):
                 tokenList = tokenList + [ntoken for ntoken in ngrams.window_no_twitter_elems(tweet, ng+1)]

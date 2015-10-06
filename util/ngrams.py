@@ -7,6 +7,25 @@ from itertools import islice
        s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...
 '''
 
+def is_hashtag(word):
+    if word.startswith('#'):
+            return True
+    return False
+
+def is_url(word):
+    if word.startswith('http'):
+            return True
+    return False
+
+def is_mention(word):
+    if word.startswith('@'):
+            return True
+    return False
+
+def is_url_or_mention(word):
+    if word.startswith('http') or word.startswith('@'):
+            return True
+    return False
 
 def contains_hashtag(iterable):
     for elem in iterable:
@@ -23,6 +42,12 @@ def contains_mention(iterable):
 def contains_url(iterable):
     for elem in iterable:
         if elem.startswith('http'):
+            return True
+    return False
+
+def contains_urls_mentions(iterable):
+    for elem in iterable:
+        if elem.startswith('http') or elem.startswith("@"):
             return True
     return False
 
@@ -60,3 +85,15 @@ def window_no_hashtags(seq, n=2):
         result = result[1:] + (elem,)
         if not contains_hashtag(result):
             yield u' '.join(result)
+
+
+if __name__ == '__main__':
+
+    tweetsAsTokens = "this is @is #a tag test http://fu.com".split()
+    print(tweetsAsTokens)
+    print contains_url(tweetsAsTokens)
+    for i in tweetsAsTokens:
+        print is_url(i)
+
+    for i in window_no_twitter_elems(tweetsAsTokens,3):
+        print i
