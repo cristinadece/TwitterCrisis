@@ -24,6 +24,18 @@ class TweetTextTokenizer:
                 tokenizedTweettext = [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
                 yield tokenizedTweettext
 
+    def getTweetAsTweetTextTokens(self): #todo this is the same as __iter__ , iter should be replaced by this
+        for fname in os.listdir(self.dirname):
+            for line in gzip.open(os.path.join(self.dirname, fname)):
+                try:
+                    tweet = json.loads(line)
+                except:
+                    print "Couldn't parse tweet: ", line[:200]
+
+                tweetText = tweet['text']
+                tokenizedTweettext = tokenizedTweettext(tweetText)
+                yield tokenizedTweettext
+
     def getTweetAsDictionary(self):
          for fname in os.listdir(self.dirname):
             for line in gzip.open(os.path.join(self.dirname, fname)):
@@ -33,6 +45,9 @@ class TweetTextTokenizer:
                     print "Couldn't parse tweet: ", line[:200]
                 yield tweet
 
+    @staticmethod
+    def tokenizeTweetText(tweetText):
+        return [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
 
 
 

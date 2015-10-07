@@ -7,6 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util import TweetTextTokenizer
 from util import ngrams
+import logging
 
 '''
 We read JSON files from directory, get the text, tokenize it and compute WordCount
@@ -41,6 +42,11 @@ def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
     output.close()
 
 if __name__ == '__main__':
+    logger = logging.getLogger("computerWordCount.py")
+    logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
+
+    logger.info('Started counting')
+
     if len(sys.argv)!=3:
         print "You need to pass the following 2 params: <tweetDirectory>  <outputFileForWordCount>"
         sys.exit(-1)
@@ -50,4 +56,4 @@ if __name__ == '__main__':
 
     wordcountPlain(tweetsAsTokens, output, False, 2)
 
-
+    logger.info('Finished counting and writing to file')
