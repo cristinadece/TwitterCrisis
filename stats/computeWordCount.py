@@ -5,7 +5,7 @@ from collections import defaultdict
 import operator
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from util import TweetTextTokenizer
+from twitter import Tweet
 from util import ngrams
 import logging
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         sys.exit(-1)
     tweetDir = sys.argv[1]
     output = sys.argv[2]
-    tweetsAsTokens = TweetTextTokenizer.TweetTextTokenizer(tweetDir)
+    tweetsAsTokens = Tweet.Tweet(tweetDir)
 
     wordcountPlain(tweetsAsTokens, output, False, 2)
 

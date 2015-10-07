@@ -8,7 +8,7 @@ stopwords=open('../resources/stop-word-list.txt', 'r').read().decode('utf-8').sp
 
 __author__ = 'cris'
 
-class TweetTextTokenizer:
+class Tweet:
     def __init__(self, dirname):
         self.dirname = dirname
 
@@ -54,7 +54,7 @@ class TweetTextTokenizer:
 if __name__ == '__main__':
     #print stopwords
 
-    tweetsAsTokens = TweetTextTokenizer("../../../english-tweets")
+    tweetsAsTokens = Tweet("../../../english-tweets")
     for i in tweetsAsTokens:
         print i
         break

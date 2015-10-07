@@ -4,7 +4,7 @@ import sys
 
 from gensim import corpora
 
-from util.TweetTextTokenizer import TweetTextTokenizer
+from twitter.Tweet import Tweet
 
 
 def tfidsWithGensim(tweets):
@@ -33,7 +33,7 @@ if __name__ == '__main__':
         sys.exit(-1)
     tweetDir = sys.argv[1]
     output = sys.argv[2]
-    tweetsAsTokens = TweetTextTokenizer(tweetDir)
+    tweetsAsTokens = Tweet(tweetDir)
 
     tfidsWithGensim(tweetsAsTokens)
 

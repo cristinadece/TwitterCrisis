@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util import ngrams
-from util.TweetTextTokenizer import TweetTextTokenizer
+from twitter.Tweet import Tweet
 
 __author__ = 'cris'
 
@@ -47,7 +47,7 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
         i+=1
         if i%10000==0:
             print 'processing tweets: ', i
-        tweetText = TweetTextTokenizer.tokenizeTweetText(tweet['text'])
+        tweetText = Tweet.tokenizeTweetText(tweet['text'])
         if tweet['user']['id_str'] in anti_refugee_users:
             hashtagList = [t for t in tweetText if ngrams.is_hashtag(t)]
             usersWithANTIHashtags[tweet['user']['id_str']].extend(hashtagList)
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
     logger.info('Started tagging users')
 
-    tweetsAsDictionary = TweetTextTokenizer(tweetDir).getTweetAsDictionary()
+    tweetsAsDictionary = Tweet(tweetDir).getTweetAsDictionary()
     userSets = tagUsers(tweetsAsDictionary)
     pos = userSets[0]
     neg = userSets[1]
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     logger.info('Started computing coocurring hashtags per users')
 
-    tweetsAsDict = TweetTextTokenizer(tweetDir).getTweetAsDictionary()
+    tweetsAsDict = Tweet(tweetDir).getTweetAsDictionary()
     [usersWithPROHashtags, usersWithANTIHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos, neg)
 
     writeOutput(usersWithPROHashtags, outputPRO)
