@@ -1,10 +1,9 @@
 from collections import defaultdict
 import sys
 import os
-from twitter.User import User
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
+from twitter.User import User
 
 
 __author__ = 'cris'
