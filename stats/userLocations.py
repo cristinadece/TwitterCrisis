@@ -1,6 +1,8 @@
 from collections import defaultdict
 import sys
 import os
+from twitter.User import User
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
 
@@ -28,7 +30,7 @@ def tagUsers(tweetsAsDictionary):
         if i%10000==0:
             print 'processing tweets: ', i
         if any(r in tweetText for r in anti_refugee):
-
+            user = User(userID)
             screen_name_dict["ANTI"].add((userID,userScreenName))
         elif any(r in tweetText for r in pro_refugee):
 

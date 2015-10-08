@@ -83,7 +83,6 @@ if __name__ == '__main__':
     pos = userSets[0]
     neg = userSets[1]
     screen_names = userSets[3]
-    print screen_names
 
     writeOutput(screen_names, userFile)
 
@@ -94,4 +93,6 @@ if __name__ == '__main__':
 
     writeOutput(usersWithPROHashtags, outputPRO)
     writeOutput(usersWithANTIHashtags, outputANTI)
+
+    logger.info("Finished writing to file")
 
