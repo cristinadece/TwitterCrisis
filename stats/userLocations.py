@@ -11,11 +11,11 @@ __author__ = 'cris'
 
 neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad'] #, "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
 
-def tagUsers(tweetsAsDictionary):
 
-    screen_name_dict = defaultdict(set)
+def getUsersWithLocation(tweetsAsDictionary):
+    user_dict = defaultdict(User)
 
     i = 0
     for tweet in tweetsAsDictionary:
@@ -30,22 +30,32 @@ def tagUsers(tweetsAsDictionary):
         if i%10000==0:
             print 'processing tweets: ', i
         if any(r in tweetText for r in anti_refugee):
-            user = User(userID)
-            screen_name_dict["ANTI"].add((userID,userScreenName))
+            if userID in user_dict:
+                User.setTweetRelatedUserAttributes(user_dict.get(userID), tweetPlace, tweetCoords)
+            else:
+                user = User(userID)
+                user = User.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
+                user_dict[userID] = user
         elif any(r in tweetText for r in pro_refugee):
-
-            screen_name_dict["PRO"].add((userID,userScreenName))
+            if userID in user_dict:
+                User.setTweetRelatedUserAttributes(user_dict.get(userID), tweetPlace, tweetCoords)
+            else:
+                user = User(userID)
+                user = User.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
+                user_dict[userID] = user
         elif any(r in tweetText for r in neutral_refugee):
+            if userID in user_dict:
+                User.setTweetRelatedUserAttributes(user_dict.get(userID), tweetPlace, tweetCoords)
+            else:
+                user = User(userID)
+                user = User.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
+                user_dict[userID] = user
 
-            screen_name_dict["NEUTRAL"].add((userID,userScreenName))
-
-    return [screen_name_dict]
 
 
+    return user_dict
 
 
-def getUserLocation():
-    return
 
 if __name__ == '__main__':
 
@@ -56,5 +66,11 @@ if __name__ == '__main__':
     tweetDir = sys.argv[1]
     output = sys.argv[2]
 
-    tweets = Tweet.getTweetAsDictionary(tweetDir)
+    tweets = Tweet(tweetDir).getTweetAsDictionary()
+    user_dict = getUsersWithLocation(tweets)
+
+    outputFILE = open(output, "w")
+    for u in user_dict.values():
+        outputFILE.write(str(u) + '\n')
+    outputFILE.close()
 
