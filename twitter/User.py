@@ -10,8 +10,8 @@ class User:
     type = "";
     screen_name = ""
     location = ""
-    tweet_locations = set()
-    tweet_coordinates = set()
+    tweet_locations = []
+    tweet_coordinates = []
 
     def __init__(self, id):
         self.id = id

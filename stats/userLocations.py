@@ -22,8 +22,8 @@ def getUsersWithLocation(tweetsAsDictionary):
         userID = tweet['user']['id_str']
         userScreenName = tweet['user']['screen_name']
         userLocation = tweet['user']['location']
-        tweetPlace = tweet['place']
-        tweetCoords = tweet['coordinates']
+        tweetPlace = tweet['place']['name']
+        tweetCoords = ((tweet['coordinates']['coordinates'][0], tweet['coordinates']['coordinates'][1]))
 
         i+=1
         if i%10000==0:
@@ -50,7 +50,8 @@ def getUsersWithLocation(tweetsAsDictionary):
                 user = User.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
                 user_dict[userID] = user
 
-
+        # if i%5==0:
+        #     break
 
     return user_dict
 
