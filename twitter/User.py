@@ -26,7 +26,7 @@ class User:
         if location is not None:
             user.location = location
         if place is not None:
-            user.tweet_locations.add(place)
+            user.tweet_locations.add(" ".join(place))
         if coordinates is not None:
             user.tweet_coordinates.add(coordinates)
         return user
