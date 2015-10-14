@@ -5,7 +5,7 @@ from collections import defaultdict
 import operator
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from twitter import Tweet
+from twitter.Tweet import Tweet
 from util import ngrams
 import logging
 
@@ -48,11 +48,12 @@ if __name__ == '__main__':
     logger.info('Started counting')
 
     if len(sys.argv)!=3:
-        print "You need to pass the following 2 params: <tweetDirectory>  <outputFileForWordCount>"
+        print "You need to pass the following 2 params: <tweetDirectory> <outputFileForWordCount>"
         sys.exit(-1)
     tweetDir = sys.argv[1]
     output = sys.argv[2]
-    tweetsAsTokens = Tweet.Tweet(tweetDir)
+
+    tweetsAsTokens = Tweet.getTweetAsTweetTextTokens(tweetDir)
 
     wordcountPlain(tweetsAsTokens, output, False, 2)
 

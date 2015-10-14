@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
 
     if len(sys.argv)!=6:
-        print "You need to pass the following 2 params: <tweetDirectory>  <userFile> <outputFileForUsersWithHashtagsPRO> <outputFileForUsersWithHashtagsANTI> <outputFileForUsersWithHashtagsNEUTRAL>"
+        print "You need to pass the following 2 params: <tweetDirectory> <userFile> <outputFileForUsersWithHashtagsPRO> <outputFileForUsersWithHashtagsANTI> <outputFileForUsersWithHashtagsNEUTRAL>"
         sys.exit(-1)
     tweetDir = sys.argv[1]
     userFile = sys.argv[2]
@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     logger.info('Started tagging users')
 
-    tweetsAsDictionary = Tweet(tweetDir).getTweetAsDictionary()
+    tweetsAsDictionary = Tweet.getTweetAsDictionary(tweetDir)
     userSets = tagUsers(tweetsAsDictionary)
     pos = userSets[0]
     neg = userSets[1]
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     logger.info('Started computing coocurring hashtags per users')
 
-    tweetsAsDict = Tweet(tweetDir).getTweetAsDictionary()
+    tweetsAsDict = Tweet().getTweetAsDictionary(tweetDir)
     [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos, neg, neu)
 
     writeOutput(usersWithPROHashtags, outputPRO)

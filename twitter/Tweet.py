@@ -9,59 +9,84 @@ stopwords=open('../resources/stop-word-list.txt', 'r').read().decode('utf-8').sp
 __author__ = 'cris'
 
 class Tweet:
-    def __init__(self, dirname):
-        self.dirname = dirname
+    # def __init__(self, dirname):
+    #     self.dirname = dirname
+    #
+    # def __iter__(self):
+    #     for fname in os.listdir(self.dirname):
+    #         for line in gzip.open(os.path.join(self.dirname, fname)):
+    #             try:
+    #                 tweet = json.loads(line)
+    #             except:
+    #                 print "Couldn't parse tweet: ", line[:200]
+    #
+    #             # tweetText = tweet['text']
+    #             # tokenizedTweettext = [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
+    #             # yield tokenizedTweettext
+    #             yield tweet
 
-    def __iter__(self):
-        for fname in os.listdir(self.dirname):
-            for line in gzip.open(os.path.join(self.dirname, fname)):
-                try:
-                    tweet = json.loads(line)
-                except:
-                    print "Couldn't parse tweet: ", line[:200]
+    @staticmethod
+    def tokenizeTweetText(tweetText):
+        return [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
 
-                tweetText = tweet['text']
-                tokenizedTweettext = [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
-                yield tokenizedTweettext
+    @staticmethod
+    def getTweetAsTweetTextTokens(path): #todo this is the same as __iter__ , iter should be replaced by this
 
-    def getTweetAsTweetTextTokens(self): #todo this is the same as __iter__ , iter should be replaced by this
-        for fname in os.listdir(self.dirname):
-            for line in gzip.open(os.path.join(self.dirname, fname)):
-                try:
-                    tweet = json.loads(line)
-                except:
-                    print "Couldn't parse tweet: ", line[:200]
+        if os.path.isdir(path):
+            for fname in os.listdir(path):
+                for line in gzip.open(os.path.join(path, fname)):
+                    try:
+                        tweet = json.loads(line)
+                    except:
+                        print "Couldn't parse tweet: ", line[:200]
 
-                tweetText = tweet['text']
-                tokenizedTweettext = tokenizedTweettext(tweetText)
-                yield tokenizedTweettext
+                    tweetText = tweet['text']
+                    tokenList = Tweet.tokenizeTweetText(tweetText)
+                    yield tokenList
+        else: #this means it is a file
+            for line in gzip.open(path):
+                    try:
+                        tweet = json.loads(line)
+                    except:
+                        print "Couldn't parse tweet: ", line[:200]
 
-    def getTweetAsDictionary(self):
-         for fname in os.listdir(self.dirname):
-            for line in gzip.open(os.path.join(self.dirname, fname)):
+                    tweetText = tweet['text']
+                    tokenList = Tweet.tokenizeTweetText(tweetText)
+                    yield tokenList
+
+
+
+    @staticmethod
+    def getTweetAsDictionary(path):
+        if os.path.isdir(path):
+             for fname in os.listdir(path):
+                for line in gzip.open(os.path.join(path, fname)):
+                    try:
+                        tweet = json.loads(line)
+                    except:
+                        print "Couldn't parse tweet: ", line[:200]
+                    yield tweet
+        else:
+            for line in gzip.open(path):
                 try:
                     tweet = json.loads(line)
                 except:
                     print "Couldn't parse tweet: ", line[:200]
                 yield tweet
 
-    @staticmethod
-    def tokenizeTweetText(tweetText):
-        return [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
-
-
-
 if __name__ == '__main__':
     #print stopwords
 
-    tweetsAsTokens = Tweet("../../../english-tweets")
+
+    tweetsAsTokens = Tweet.getTweetAsTweetTextTokens("../../../english-tweets")
     for i in tweetsAsTokens:
         print i
         break
 
     j=0
-    for i in tweetsAsTokens.getTweetAsDictionary():
+    for i in Tweet.getTweetAsDictionary("../../../english-tweets/sample/90-tweets.json.gz"):
         j+=1
+        print j
         print i['user']['id_str']
         print i['user']['location']
 

@@ -71,7 +71,7 @@ if __name__ == '__main__':
     tweetDir = sys.argv[1]
     output = sys.argv[2]
 
-    tweets = Tweet(tweetDir).getTweetAsDictionary()
+    tweets = Tweet.getTweetAsDictionary(tweetDir)
     user_dict = getUsersWithLocation(tweets)
 
     outputFILE = open(output, "w")
