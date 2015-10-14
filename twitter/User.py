@@ -26,15 +26,15 @@ class User:
         if location is not None:
             user.location = location
         if place is not None:
-            user.tweet_locations.add(" ".join(place))
+            user.tweet_locations.append(place)
         if coordinates is not None:
-            user.tweet_coordinates.add(coordinates)
+            user.tweet_coordinates.append(coordinates)
         return user
 
     @staticmethod
     def setTweetRelatedUserAttributes(user, place, coord):
         if place is not None:
-            user.tweet_locations.add(place)
+            user.tweet_locations.append(place)
         if coord is not None:
-            user.tweet_coordinates.add(coord)
+            user.tweet_coordinates.append(coord)
         return user
