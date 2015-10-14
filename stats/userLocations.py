@@ -22,8 +22,10 @@ def getUsersWithLocation(tweetsAsDictionary):
         userID = tweet['user']['id_str']
         userScreenName = tweet['user']['screen_name']
         userLocation = tweet['user']['location']
+        tweetPlace = None
+        tweetCoords = None
         if tweet['place'] is not None:
-            tweetPlace = tweet['place']['name']
+            tweetPlace = tweet['place']['full_name']
         if tweet['coordinates'] is not None:
             tweetCoords = ((tweet['coordinates']['coordinates'][0], tweet['coordinates']['coordinates'][1]))
 
