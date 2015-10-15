@@ -11,7 +11,7 @@ __author__ = 'cris'
 
 neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad'] #, "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
 
 def tagUsers(tweetsAsDictionary):
     pro_refugee_users = set()
@@ -51,13 +51,13 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
             print 'processing tweets: ', i
         tweetText = Tweet.tokenizeTweetText(tweet['text'])
         if tweet['user']['id_str'] in anti_refugee_users:
-            hashtagList = [str(t) for t in tweetText if ngrams.is_hashtag(t)]
+            hashtagList = [t for t in tweetText if ngrams.is_hashtag(t)]
             usersWithANTIHashtags[tweet['user']['id_str']].extend(hashtagList)
         elif tweet['user']['id_str'] in pro_refugee_users:
-            hashtagList = [str(t) for t in tweetText if ngrams.is_hashtag(t)]
+            hashtagList = [t for t in tweetText if ngrams.is_hashtag(t)]
             usersWithPROHashtags[tweet['user']['id_str']].extend(hashtagList)
         elif tweet['user']['id_str'] in neutral_refugee_users:
-            hashtagList = [str(t) for t in tweetText if ngrams.is_hashtag(t)]
+            hashtagList = [t for t in tweetText if ngrams.is_hashtag(t)]
             usersWithNEUTRALHashtags[tweet['user']['id_str']].extend(hashtagList)
 
     return [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags]
