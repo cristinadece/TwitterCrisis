@@ -38,6 +38,7 @@ def getUsersWithLocation(tweetsAsDictionary):
         tweetCoords = None
         if tweet['place'] is not None:
             tweetPlace = tweet['place']['full_name']
+        print userID, tweetPlace
 
         if tweet['coordinates'] is not None:
             tweetCoords = ((tweet['coordinates']['coordinates'][0], tweet['coordinates']['coordinates'][1]))
@@ -45,6 +46,7 @@ def getUsersWithLocation(tweetsAsDictionary):
         i+=1
         if i%10000==0:
             print 'processing tweets: ', i
+
         if any(r in tweetText for r in anti_refugee):
             addUserToCorrespondingDict(userID, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords, user_dict)
         elif any(r in tweetText for r in pro_refugee):
