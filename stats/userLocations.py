@@ -48,15 +48,18 @@ def getUsersWithLocation(tweetsAsDictionary):
             print 'processing tweets: ', i
 
         if any(r in tweetText for r in anti_refugee):
-            print "ANTI", userID, tweetPlace
+            # print "ANTI", userID, tweetPlace
             addUserToCorrespondingDict(userID, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords, user_dict)
         elif any(r in tweetText for r in pro_refugee):
-            print "PRO", userID, tweetPlace
+            # print "PRO", userID, tweetPlace
             addUserToCorrespondingDict(userID, "PRO", userLocation, userScreenName, tweetPlace, tweetCoords, user_dict)
         elif any(r in tweetText for r in neutral_refugee):
-            print "NEUTRAL", userID, tweetPlace
+            # print "NEUTRAL", userID, tweetPlace
             addUserToCorrespondingDict(userID, "NEUTRAL", userLocation, userScreenName, tweetPlace, tweetCoords, user_dict)
 
+
+        if any(r in tweetText for r in anti_refugee+pro_refugee+neutral_refugee):
+            print user_dict[userID]
             # if i%5==0:
             #     break
 
