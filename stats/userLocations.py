@@ -2,27 +2,29 @@ import codecs
 from collections import defaultdict
 import sys
 import os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
 from twitter.User import User
 
-
 __author__ = 'cris'
 
-neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees']
+neutral_refugee = ['#refugeescrisis', '#syrianrefugees', '#refugees']
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
 anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
 
-def addUserToCorrespondingDict(userID, userType, userScreenName, userLocation, tweetPlace, tweetCoords, user_dict):
-    if userID in user_dict:
-        old_user = user_dict.get(userID)
+
+def addUserToCorrespondingDict(userID, userType, userLocation, userScreenName, tweetPlace, tweetCoords, user_dict2):
+    if userID in user_dict2:
+        old_user = user_dict2.get(userID)
         old_user.setTweetRelatedUserAttributes(tweetPlace, tweetCoords)
+        user_dict[userID] = old_user
     else:
         user = User(userID)
         user.setUserAttributes(userType, userLocation, userScreenName)
         user.setTweetRelatedUserAttributes(tweetPlace, tweetCoords)
         user_dict[userID] = user
-    return user_dict
+    return user_dict2
 
 
 def getUsersWithLocation(tweetsAsDictionary):
@@ -41,32 +43,29 @@ def getUsersWithLocation(tweetsAsDictionary):
         if tweet['coordinates'] is not None:
             tweetCoords = ((tweet['coordinates']['coordinates'][0], tweet['coordinates']['coordinates'][1]))
 
-
-        i+=1
-        if i%10000==0:
+        i += 1
+        if i % 10000 == 0:
             print 'processing tweets: ', i
 
         if any(r in tweetText for r in anti_refugee):
-            #print "ANTI", userID, tweetPlace
+            # print "ANTI", userID, tweetPlace
             addUserToCorrespondingDict(userID, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords, user_dict)
         elif any(r in tweetText for r in pro_refugee):
-            #print "PRO", userID, tweetPlace
+            # print "PRO", userID, tweetPlace
             addUserToCorrespondingDict(userID, "PRO", userLocation, userScreenName, tweetPlace, tweetCoords, user_dict)
         elif any(r in tweetText for r in neutral_refugee):
-            #print "NEUTRAL", userID, tweetPlace
+            # print "NEUTRAL", userID, tweetPlace
             addUserToCorrespondingDict(userID, "NEUTRAL", userLocation, userScreenName, tweetPlace, tweetCoords, user_dict)
 
-        if any(r in tweetText for r in anti_refugee + pro_refugee + neutral_refugee):
-            print user_dict[userID]
-        # if i%5==0:
-        #     break
+            # if i%5==0:
+            #     break
 
     return user_dict
 
+
 if __name__ == '__main__':
 
-
-    if len(sys.argv)!=3:
+    if len(sys.argv) != 3:
         print "You need to pass the following 2 params: <tweetDirectory>  <outputFileForWordCount>"
         sys.exit(-1)
     tweetDir = sys.argv[1]
@@ -79,4 +78,3 @@ if __name__ == '__main__':
     for u in user_dict.values():
         outputFILE.write(u.toString())
     outputFILE.close()
-

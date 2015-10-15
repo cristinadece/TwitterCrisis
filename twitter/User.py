@@ -27,7 +27,7 @@ class User:
         self.screen_name = screenname
         if location is not None:
             self.location = location
-        return self
+
 
 
     def setTweetRelatedUserAttributes(self, place, coord):
@@ -35,4 +35,4 @@ class User:
             self.tweet_locations.append(place)
         if coord is not None:
             self.tweet_coordinates.append(coord)
-        return self
+
