@@ -32,7 +32,7 @@ class User:
 
     def setTweetRelatedUserAttributes(self, place, coord):
         if place is not None:
-            self.tweet_locations.append(str(place))
+            self.tweet_locations.append(place)
         if coord is not None:
-            self.tweet_coordinates.append(str(coord))
+            self.tweet_coordinates.append(coord)
         return self
