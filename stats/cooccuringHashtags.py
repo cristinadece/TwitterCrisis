@@ -1,3 +1,4 @@
+import codecs
 from collections import defaultdict
 import logging
 import sys
@@ -10,7 +11,7 @@ __author__ = 'cris'
 
 neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad'] #, "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
 
 def tagUsers(tweetsAsDictionary):
     pro_refugee_users = set()
@@ -50,21 +51,21 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
             print 'processing tweets: ', i
         tweetText = Tweet.tokenizeTweetText(tweet['text'])
         if tweet['user']['id_str'] in anti_refugee_users:
-            hashtagList = [t for t in tweetText if ngrams.is_hashtag(t)]
+            hashtagList = [str(t) for t in tweetText if ngrams.is_hashtag(t)]
             usersWithANTIHashtags[tweet['user']['id_str']].extend(hashtagList)
         elif tweet['user']['id_str'] in pro_refugee_users:
-            hashtagList = [t for t in tweetText if ngrams.is_hashtag(t)]
+            hashtagList = [str(t) for t in tweetText if ngrams.is_hashtag(t)]
             usersWithPROHashtags[tweet['user']['id_str']].extend(hashtagList)
         elif tweet['user']['id_str'] in neutral_refugee_users:
-            hashtagList = [t for t in tweetText if ngrams.is_hashtag(t)]
+            hashtagList = [str(t) for t in tweetText if ngrams.is_hashtag(t)]
             usersWithNEUTRALHashtags[tweet['user']['id_str']].extend(hashtagList)
 
     return [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags]
 
 def writeOutput(dictUserHashtagList, outputFile):
-    output = open(outputFile, 'w')
+    output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
-        output.write(u'{}\t{}\n'.format(k,v).encode('utf-8'))
+        output.write(u'{}\t{}\n'.format(k,v)) #.encode('utf-8'))
     output.close()
 
 if __name__ == '__main__':

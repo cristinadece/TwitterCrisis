@@ -1,3 +1,5 @@
+import codecs
+
 __author__ = 'cris'
 
 import sys
@@ -16,7 +18,7 @@ We read JSON files from directory, get the text, tokenize it and compute WordCou
 
 def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
     wordcount = defaultdict(int)
-    output = open(outputfile, 'w')
+    output = codecs.open(outputfile, "w", "utf-8")
     i=0
     for tweet in tweets:
         i+=1
@@ -38,7 +40,8 @@ def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
     print "Total words" , len(wordcount)
     sorted_wc = sorted(wordcount.items(), key=operator.itemgetter(1), reverse=True)
     for k,v in sorted_wc:
-        output.write(u'{}\t{}\n'.format(k,v).encode('utf-8'))
+        # todo json load, dump
+        output.write(u'{}\t{}\n'.format(k,v)) #.encode('utf-8',errors='ignore'))
     output.close()
 
 if __name__ == '__main__':

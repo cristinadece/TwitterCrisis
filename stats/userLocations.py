@@ -8,7 +8,7 @@ from twitter.User import User
 
 __author__ = 'cris'
 
-neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
+neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees']
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
 anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
 
@@ -35,32 +35,33 @@ def getUsersWithLocation(tweetsAsDictionary):
             print 'processing tweets: ', i
         if any(r in tweetText for r in anti_refugee):
             if userID in user_dict:
-                User.setTweetRelatedUserAttributes(user_dict.get(userID), tweetPlace, tweetCoords)
+                old_user = user_dict.get(userID)
+                old_user.setTweetRelatedUserAttributes(old_user, tweetPlace, tweetCoords)
             else:
                 user = User(userID)
-                user = User.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
+                user.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
                 user_dict[userID] = user
         elif any(r in tweetText for r in pro_refugee):
             if userID in user_dict:
-                User.setTweetRelatedUserAttributes(user_dict.get(userID), tweetPlace, tweetCoords)
+                old_user = user_dict.get(userID)
+                old_user.setTweetRelatedUserAttributes(old_user, tweetPlace, tweetCoords)
             else:
                 user = User(userID)
-                user = User.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
+                user.setUserAttributes(user, "PRO", userLocation, userScreenName, tweetPlace, tweetCoords)
                 user_dict[userID] = user
         elif any(r in tweetText for r in neutral_refugee):
             if userID in user_dict:
-                User.setTweetRelatedUserAttributes(user_dict.get(userID), tweetPlace, tweetCoords)
+                old_user = user_dict.get(userID)
+                old_user.setTweetRelatedUserAttributes(old_user, tweetPlace, tweetCoords)
             else:
                 user = User(userID)
-                user = User.setUserAttributes(user, "ANTI", userLocation, userScreenName, tweetPlace, tweetCoords)
+                user.setUserAttributes(user, "NEUTRAL", userLocation, userScreenName, tweetPlace, tweetCoords)
                 user_dict[userID] = user
 
         # if i%5==0:
         #     break
 
     return user_dict
-
-
 
 if __name__ == '__main__':
 
