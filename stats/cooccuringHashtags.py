@@ -11,7 +11,7 @@ __author__ = 'cris'
 
 neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad'] #, "#teenchoiceawards"]
 
 def tagUsers(tweetsAsDictionary):
     pro_refugee_users = set()
@@ -29,13 +29,13 @@ def tagUsers(tweetsAsDictionary):
             print 'processing tweets: ', i
         if any(r in tweetText for r in anti_refugee):
             anti_refugee_users.add(userID)
-            screen_name_dict["ANTI"].add((userID,userScreenName))
+            screen_name_dict["ANTI"].add((str(userID),str(userScreenName)))
         elif any(r in tweetText for r in pro_refugee):
             pro_refugee_users.add(userID)
-            screen_name_dict["PRO"].add((userID,userScreenName))
+            screen_name_dict["PRO"].add((str(userID),str(userScreenName)))
         elif any(r in tweetText for r in neutral_refugee):
             neutral_refugee_users.add(userID)
-            screen_name_dict["NEUTRAL"].add((userID,userScreenName))
+            screen_name_dict["NEUTRAL"].add((str(userID),str(userScreenName)))
 
     return [pro_refugee_users, anti_refugee_users, neutral_refugee_users, screen_name_dict]
 

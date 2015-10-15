@@ -9,21 +9,6 @@ stopwords=open('../resources/stop-word-list.txt', 'r').read().decode('utf-8').sp
 __author__ = 'cris'
 
 class Tweet:
-    # def __init__(self, dirname):
-    #     self.dirname = dirname
-    #
-    # def __iter__(self):
-    #     for fname in os.listdir(self.dirname):
-    #         for line in gzip.open(os.path.join(self.dirname, fname)):
-    #             try:
-    #                 tweet = json.loads(line)
-    #             except:
-    #                 print "Couldn't parse tweet: ", line[:200]
-    #
-    #             # tweetText = tweet['text']
-    #             # tokenizedTweettext = [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
-    #             # yield tokenizedTweettext
-    #             yield tweet
 
     @staticmethod
     def tokenizeTweetText(tweetText):
