@@ -18,12 +18,12 @@ def addUserToCorrespondingDict(userID, userType, userLocation, userScreenName, t
     if userID in user_dict2:
         old_user = user_dict2.get(userID)
         old_user.setTweetRelatedUserAttributes(tweetPlace, tweetCoords)
-        user_dict[userID] = old_user
+        user_dict2[userID] = old_user
     else:
         user = User(userID)
         user.setUserAttributes(userType, userLocation, userScreenName)
         user.setTweetRelatedUserAttributes(tweetPlace, tweetCoords)
-        user_dict[userID] = user
+        user_dict2[userID] = user
     return user_dict2
 
 
