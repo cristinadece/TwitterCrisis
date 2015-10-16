@@ -11,7 +11,7 @@ __author__ = 'cris'
 
 neutral_refugee = ['#refugeescrisis', '#syrianrefugees', '#refugees']
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad'] #, "#teenchoiceawards"]
 
 
 def addUserToCorrespondingDict(userID, userType, userLocation, userScreenName, tweetPlace, tweetCoords, user_dict2):

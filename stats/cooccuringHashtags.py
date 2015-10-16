@@ -11,7 +11,7 @@ __author__ = 'cris'
 
 neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad']#, "#teenchoiceawards"]
 
 def tagUsers(tweetsAsDictionary):
     pro_refugee_users = set()
@@ -65,7 +65,7 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
 def writeOutput(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
-        output.write(u'{}\t{}\n'.format(k,v)) #.encode('utf-8'))
+        output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
     output.close()
 
 if __name__ == '__main__':

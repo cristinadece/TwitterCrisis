@@ -28,6 +28,9 @@ def countHashtagsFromList(filename):
 
     return OrderedDict(sorted(hashtagFreq.items(), key=lambda t: t[1]), reverse=True)
 
+# remember we can do merge here
+
+
 if __name__ == '__main__':
     logger = logging.getLogger("computerHashtags.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
