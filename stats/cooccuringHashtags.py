@@ -1,5 +1,6 @@
 import codecs
 from collections import defaultdict
+import json
 import logging
 import sys
 import os
@@ -11,7 +12,7 @@ __author__ = 'cris'
 
 neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad']#, "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
 
 def tagUsers(tweetsAsDictionary):
     pro_refugee_users = set()
@@ -68,6 +69,20 @@ def writeOutput(dictUserHashtagList, outputFile):
         output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
     output.close()
 
+def writeOutputJSON(dictUserHashtagList, outputFile):
+    output = codecs.open(outputFile, "w", "utf-8")
+    for item in dictUserHashtagList.iteritems():
+        output.write(json.dumps(item))
+        output.write('\n')
+    output.close()
+
+def writeOutputJSON2(dictUserHashtagList, outputFile): ### do we want the hashtags unique per user per tweet? or per user .
+    output = codecs.open(outputFile, "w", "utf-8")
+    for k,v in dictUserHashtagList.iteritems():
+        output.write(k+'\t'+json.dumps(list(set(v))))
+        output.write('\n')
+    output.close()
+
 if __name__ == '__main__':
 
 
@@ -99,9 +114,9 @@ if __name__ == '__main__':
     tweetsAsDict = Tweet().getTweetAsDictionary(tweetDir)
     [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos, neg, neu)
 
-    writeOutput(usersWithPROHashtags, outputPRO)
-    writeOutput(usersWithANTIHashtags, outputANTI)
-    writeOutput(usersWithNEUTRALHashtags, outputNEUTRAL)
+    writeOutputJSON2(usersWithPROHashtags, outputPRO)
+    writeOutputJSON2(usersWithANTIHashtags, outputANTI)
+    writeOutputJSON2(usersWithNEUTRALHashtags, outputNEUTRAL)
 
 
     logger.info("Finished writing to file")

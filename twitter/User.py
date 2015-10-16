@@ -14,11 +14,13 @@ class User:
         self.tweet_locations = []
         self.tweet_coordinates = []
 
-    def __str__(self): # this is tricky
-        return u"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format(self.id, self.type, self.screen_name, self.location, self.tweet_locations, self.tweet_coordinates).encode('utf-8')
+
 
     def toString(self):
         return u"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format(self.id, self.type, self.screen_name, self.location, self.tweet_locations, self.tweet_coordinates)
+
+    def toJson(self):
+        return json.dumps(self)
 
     def setUserAttributes(self, type, location, screenname):
         self.type = type

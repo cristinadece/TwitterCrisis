@@ -4,7 +4,11 @@ import json
 import os
 from tokenizer import twokenize
 
-stopwords=open('../resources/stop-word-list.txt', 'r').read().decode('utf-8').split('\r\n')
+#stopwords=open('../resources/stop-word-list.txt', 'r').read().decode('utf-8').split('\r\n')
+
+dir = os.path.dirname(__file__)
+stopwordsFile = os.path.join(dir, '../resources/stop-word-list.txt')
+stopwords = open(stopwordsFile, 'r').read().decode('utf-8').split('\r\n')
 
 __author__ = 'cris'
 
