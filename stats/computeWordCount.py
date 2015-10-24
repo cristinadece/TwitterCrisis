@@ -1,4 +1,5 @@
 import codecs
+from pandas import json
 
 __author__ = 'cris'
 
@@ -16,9 +17,22 @@ We read JSON files from directory, get the text, tokenize it and compute WordCou
 
 '''
 
-def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
-    wordcount = defaultdict(int)
+def printJson(sorted_wc, outputfile):
+    output = open(outputfile, "w")
+    for item in sorted_wc:
+        output.write(json.dumps(item) + '\n')
+    output.close()
+
+def printTSV(sorted_wc, outputfile):
     output = codecs.open(outputfile, "w", "utf-8")
+    for k,v in sorted_wc:
+        output.write(u'{}\t{}\n'.format(k,v)) #.encode('utf-8',errors='ignore'))
+    output.close()
+
+
+def wordcountPlain(tweets,  onlyHashtags=False, ngram=1):
+    wordcount = defaultdict(int)
+
     i=0
     for tweet in tweets:
         i+=1
@@ -39,10 +53,7 @@ def wordcountPlain(tweets, outputfile, onlyHashtags=False, ngram=1):
                 wordcount[token] += 1
     print "Total words" , len(wordcount)
     sorted_wc = sorted(wordcount.items(), key=operator.itemgetter(1), reverse=True)
-    for k,v in sorted_wc:
-        # todo json load, dump
-        output.write(u'{}\t{}\n'.format(k,v)) #.encode('utf-8',errors='ignore'))
-    output.close()
+    return sorted_wc
 
 if __name__ == '__main__':
     logger = logging.getLogger("computerWordCount.py")
@@ -58,6 +69,8 @@ if __name__ == '__main__':
 
     tweetsAsTokens = Tweet.getTweetAsTweetTextTokens(tweetDir)
 
-    wordcountPlain(tweetsAsTokens, output, False, 2)
+    sorted_wordcount = wordcountPlain(tweetsAsTokens, False, 2)
+    printTSV(sorted_wordcount, output)
+    #printJson(sorted_wordcount, output)
 
     logger.info('Finished counting and writing to file')

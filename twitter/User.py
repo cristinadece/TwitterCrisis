@@ -1,14 +1,14 @@
+from pandas import json
+
 __author__ = 'cris'
 
-import gzip
-import json
-import os
+
 
 class User:
 
     def __init__(self, id):
         self.id = id
-        self.type = "";
+        self.type = ""
         self.screen_name = ""
         self.location = ""
         self.tweet_locations = []
@@ -19,8 +19,13 @@ class User:
     def toString(self):
         return u"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format(self.id, self.type, self.screen_name, self.location, self.tweet_locations, self.tweet_coordinates)
 
+
     def toJson(self):
-        return json.dumps(self)
+        """
+
+        :rtype : str
+        """
+        return json.dumps(self.__dict__)
 
     def setUserAttributes(self, type, location, screenname):
         self.type = type

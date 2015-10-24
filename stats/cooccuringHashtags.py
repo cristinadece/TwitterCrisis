@@ -8,11 +8,23 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util import ngrams
 from twitter.Tweet import Tweet
 
+
 __author__ = 'cris'
+
+
+'''
+This script computes cooccuring hashtags (from relevant users) with few preselected
+Run it:
+<python cooccuringHashtags.py ../../../../english-tweets ../../../../users-by-type.json
+../../../../cooc-hashtags-Pro.json ../../../../cooc-hashtags-Anti.json ../../../../cooc-hashtags-Neutral.json>
+
+
+'''
 
 neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad'] #, "#teenchoiceawards"]
+
 
 def tagUsers(tweetsAsDictionary):
     pro_refugee_users = set()
@@ -40,6 +52,7 @@ def tagUsers(tweetsAsDictionary):
 
     return [pro_refugee_users, anti_refugee_users, neutral_refugee_users, screen_name_dict]
 
+
 def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_users, neutral_refugee_users):
     i=0
     usersWithPROHashtags = defaultdict(list)
@@ -63,11 +76,14 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
 
     return [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags]
 
+
 def writeOutput(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
+
         output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
     output.close()
+
 
 def writeOutputJSON(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
@@ -76,12 +92,17 @@ def writeOutputJSON(dictUserHashtagList, outputFile):
         output.write('\n')
     output.close()
 
-def writeOutputJSON2(dictUserHashtagList, outputFile): ### do we want the hashtags unique per user per tweet? or per user .
+
+### do we want the hashtags unique per user per tweet? or per user .
+### now is per user
+def writeOutputJSON2(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
-        output.write(k+'\t'+json.dumps(list(set(v))))
+        hashtagsAsString = ",".join(list(set(v)))
+        output.write(k+'\t'+json.dumps(hashtagsAsString).replace('"', '')) #todo: this is too strange
         output.write('\n')
     output.close()
+
 
 if __name__ == '__main__':
 

@@ -1,5 +1,4 @@
-import codecs
-from collections import defaultdict
+from pandas import json
 import sys
 import os
 
@@ -78,6 +77,8 @@ if __name__ == '__main__':
     user_dict = getUsersWithLocation(tweets)
 
     outputFILE = open(output, "w")
-    for u in user_dict.values():
-        outputFILE.write(u.toJson)
+    for u in user_dict.iteritems():
+        # is there any value equal to None?
+        outputFILE.write(json.dumps(u) + "\n")
+
     outputFILE.close()
