@@ -40,7 +40,7 @@ def countHashtagsFromList(userHashDict):
 def writeOutputPlain(sortedHashtags, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in sortedHashtags.iteritems():
-        s = k + '\t' + v + '\n'
+        s = k + '\t' + str(v) + '\n'
         output.write(s)
     output.close()
 
