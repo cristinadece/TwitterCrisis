@@ -22,20 +22,23 @@ def buildUserHashtagsDict(path, type):
             if type in fname:  # if we want ANTI hashtags we search for outputs referring only to this
                 inputFile = codecs.open(os.path.join(path, fname), 'r', 'utf8')
                 for line in inputFile:
-                    items = line.split('\t')
+                    items = line.replace('\n', '').split('\t')
                     user = items[0]
                     hashtags = set(items[1].split(','))
                     userHashDict[user].update(hashtags)
+    else:
+        print "This is not a directory!"
 
+    print userHashDict
     return userHashDict
 
 def countHashtagsFromList(userHashDict):
     hashtagFreq = defaultdict(int)
-    for hashtagSet in userHashDict:
+    for hashtagSet in userHashDict.itervalues():
         for hashtag in hashtagSet:
             hashtagFreq[hashtag] += 1
 
-    return OrderedDict(sorted(hashtagFreq.items(), key=lambda t: t[1]), reverse=True)
+    return OrderedDict(sorted(hashtagFreq.items(), key=lambda t: t[1], reverse=True))
 
 def writeOutputPlain(sortedHashtags, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")

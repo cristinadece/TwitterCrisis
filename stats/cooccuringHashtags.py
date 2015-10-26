@@ -40,6 +40,8 @@ def tagUsers(tweetsAsDictionary):
         userID = tweet['user']['id_str']
         userScreenName = tweet['user']['screen_name']
         i+=1
+        if i%100000==0:
+            break
         if i%10000==0:
             print 'processing tweets: ', i
         if any(r in tweetText for r in anti_refugee):
@@ -63,6 +65,8 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
 
     for tweet in tweetsAsDictionary:
         i+=1
+        if i%100000==0:
+            break
         if i%10000==0:
             print 'processing tweets: ', i
         tweetText = Tweet.tokenizeTweetText(tweet['text'])
@@ -82,7 +86,7 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
 def writeOutput(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
-        output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
+        output.write('{}\t{}\n'.format(k,v))
     output.close()
 
 
@@ -109,6 +113,7 @@ def writeOutputPlain(dictUserHashtagList, outputFile):
     for k,v in dictUserHashtagList.iteritems():
         hashtagsAsString = ",".join(list(set(v)))
         s = k + '\t' + hashtagsAsString.encode("utf-8") + '\n'
+        print s
         output.write(s)
     output.close()
 
