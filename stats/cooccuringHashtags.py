@@ -80,8 +80,9 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
 def writeOutput(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
-
-        output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
+        s = k + '\t' + v.encode('utf-8') + '\n'
+        output.write(s)
+        #output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
     output.close()
 
 
@@ -135,9 +136,13 @@ if __name__ == '__main__':
     tweetsAsDict = Tweet().getTweetAsDictionary(tweetDir)
     [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos, neg, neu)
 
-    writeOutputJSON2(usersWithPROHashtags, outputPRO)
-    writeOutputJSON2(usersWithANTIHashtags, outputANTI)
-    writeOutputJSON2(usersWithNEUTRALHashtags, outputNEUTRAL)
+    # writeOutputJSON2(usersWithPROHashtags, outputPRO)
+    # writeOutputJSON2(usersWithANTIHashtags, outputANTI)
+    # writeOutputJSON2(usersWithNEUTRALHashtags, outputNEUTRAL)
+
+    writeOutput(usersWithPROHashtags, outputPRO)
+    writeOutput(usersWithANTIHashtags, outputANTI)
+    writeOutput(usersWithNEUTRALHashtags, outputNEUTRAL)
 
 
     logger.info("Finished writing to file")
