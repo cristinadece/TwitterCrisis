@@ -50,8 +50,8 @@ if __name__ == '__main__':
 
     logger.info('Started counting')
 
-    if len(sys.argv)!=3:
-        print "You need to pass the following 2 params: <inputDIR> <ANTI/PRO/NEUTRAL> <outputFileForHashtagCount>"
+    if len(sys.argv)!=4:
+        print "You need to pass the following 3 params: <inputDIR> <ANTI/PRO/NEUTRAL> <outputFileForHashtagCount>"
         sys.exit(-1)
     inputDir = sys.argv[1]
     type = sys.argv[2]

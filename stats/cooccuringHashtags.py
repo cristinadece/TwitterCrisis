@@ -18,6 +18,8 @@ Run it:
 <python cooccuringHashtags.py ../../../../english-tweets ../../../../users-by-type.json
 ../../../../cooc-hashtags-Pro.json ../../../../cooc-hashtags-Anti.json ../../../../cooc-hashtags-Neutral.json>
 
+Parallel version:
+./runParallelCooccurringHashtags.sh
 
 '''
 
