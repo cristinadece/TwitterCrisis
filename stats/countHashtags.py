@@ -1,12 +1,11 @@
+import codecs
+
 __author__ = 'muntean'
 
 import sys
 from collections import defaultdict, OrderedDict
-import operator
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from twitter.Tweet import Tweet
-from util import ngrams
 import logging
 
 '''
@@ -15,39 +14,58 @@ We do this in order to discover new significant PRO, ANTI and NEUTRAL hashtags.
 
 '''
 
-def countHashtagsFromList(filename):
-    hashtagFreq = defaultdict(int)
-    for line in open(filename, 'r'):
-        hashtagList = line.split('\t')[1]
-        print hashtagList
-        # convert it to real list
+# We need to read UTF8
+def buildUserHashtagsDict(path, type):
+    userHashDict = defaultdict(set)
+    if os.path.isdir(path):
+        for fname in os.listdir(path):
+            if type in fname:  # if we want ANTI hashtags we search for outputs referring only to this
+                inputFile = codecs.open(os.path.join(path, fname), 'r', 'utf8')
+                for line in inputFile:
+                    items = line.split('\t')
+                    user = items[0]
+                    hashtags = set(items[1].split(','))
+                    userHashDict[user].update(hashtags)
 
-        for hashtag in hashtagList:
-            print hashtag
+    return userHashDict
+
+def countHashtagsFromList(userHashDict):
+    hashtagFreq = defaultdict(int)
+    for hashtagSet in userHashDict:
+        for hashtag in hashtagSet:
             hashtagFreq[hashtag] += 1
 
     return OrderedDict(sorted(hashtagFreq.items(), key=lambda t: t[1]), reverse=True)
 
-# remember we can do merge here
-
+def writeOutputPlain(sortedHashtags, outputFile):
+    output = codecs.open(outputFile, "w", "utf-8")
+    for k,v in sortedHashtags.iteritems():
+        s = k + '\t' + v + '\n'
+        output.write(s)
+    output.close()
 
 if __name__ == '__main__':
-    logger = logging.getLogger("computerHashtags.py")
+    logger = logging.getLogger("countHashtags.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
     logger.info('Started counting')
 
     if len(sys.argv)!=3:
-        print "You need to pass the following 2 params: <inputFile> <outputFileForHashtagCount>"
+        print "You need to pass the following 2 params: <inputDIR> <ANTI/PRO/NEUTRAL> <outputFileForHashtagCount>"
         sys.exit(-1)
-    inputFile = sys.argv[1]
-    outputFile = sys.argv[2]
+    inputDir = sys.argv[1]
+    type = sys.argv[2]
+    outputFile = sys.argv[3]
 
-    sortedHashtags = countHashtagsFromList(inputFile)
+    # build user dict with hashtag set
+    userHashtagsDict = buildUserHashtagsDict(inputDir, type)
+
+    # top hashtags per user Type <ANTI/PRO/NEUTRAL>
+    sortedHashtags = countHashtagsFromList(userHashtagsDict)
     print len(sortedHashtags), sortedHashtags
-    for k,v in sortedHashtags:
-        outputFile.write('{}\t{}\n'.format(k,v).encode('utf-8'))
-    outputFile.close()
+
+    # print to file
+    writeOutputPlain(sortedHashtags, outputFile)
 
     logger.info('Finished counting and writing to file')
 

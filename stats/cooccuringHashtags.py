@@ -80,9 +80,7 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
 def writeOutput(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
-        s = k + '\t' + v.encode('utf-8') + '\n'
-        output.write(s)
-        #output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
+        output.write('{}\t{}\n'.format(k,v)) #.encode('utf-8'))
     output.close()
 
 
@@ -96,12 +94,20 @@ def writeOutputJSON(dictUserHashtagList, outputFile):
 
 ### do we want the hashtags unique per user per tweet? or per user .
 ### now is per user
-def writeOutputJSON2(dictUserHashtagList, outputFile):
+def writeOutputPlainAndJSON(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in dictUserHashtagList.iteritems():
         hashtagsAsString = ",".join(list(set(v)))
         output.write(k+'\t'+json.dumps(hashtagsAsString).replace('"', '')) #todo: this is too strange
         output.write('\n')
+    output.close()
+
+def writeOutputPlain(dictUserHashtagList, outputFile):
+    output = codecs.open(outputFile, "w", "utf-8")
+    for k,v in dictUserHashtagList.iteritems():
+        hashtagsAsString = ",".join(list(set(v)))
+        s = k + '\t' + hashtagsAsString.encode("utf-8") + '\n'
+        output.write(s)
     output.close()
 
 
@@ -140,9 +146,9 @@ if __name__ == '__main__':
     # writeOutputJSON2(usersWithANTIHashtags, outputANTI)
     # writeOutputJSON2(usersWithNEUTRALHashtags, outputNEUTRAL)
 
-    writeOutput(usersWithPROHashtags, outputPRO)
-    writeOutput(usersWithANTIHashtags, outputANTI)
-    writeOutput(usersWithNEUTRALHashtags, outputNEUTRAL)
+    writeOutputPlain(usersWithPROHashtags, outputPRO)
+    writeOutputPlain(usersWithANTIHashtags, outputANTI)
+    writeOutputPlain(usersWithNEUTRALHashtags, outputNEUTRAL)
 
 
     logger.info("Finished writing to file")
