@@ -29,7 +29,6 @@ def buildUserHashtagsDict(path, type):
     else:
         print "This is not a directory!"
 
-    print userHashDict
     return userHashDict
 
 def countHashtagsFromList(userHashDict):
@@ -65,7 +64,6 @@ if __name__ == '__main__':
 
     # top hashtags per user Type <ANTI/PRO/NEUTRAL>
     sortedHashtags = countHashtagsFromList(userHashtagsDict)
-    print len(sortedHashtags), sortedHashtags
 
     # print to file
     writeOutputPlain(sortedHashtags, outputFile)
