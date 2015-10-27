@@ -12,6 +12,10 @@ import logging
 We read USER with hashtags file, count hashtags, write to file.
 We do this in order to discover new significant PRO, ANTI and NEUTRAL hashtags.
 
+Usage:
+
+python countHashtags.py ../../output-sem-coocc-hashtags-v1/ ANTI ../../output-sem-coocc-hashtags-v1/top-ANTI-hashtags.tsv
+
 '''
 
 # We need to read UTF8
