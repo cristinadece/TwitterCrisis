@@ -2,6 +2,7 @@
 
 CORES=6
 INPUT_DIR=/home/muntean/english-tweets-09
+#INPUT_DIR=/data/tweets
 OUTPUT_DIR=/home/muntean/output-sem-coocc-hashtags
 COMMAND="python ../stats/cooccuringHashtags.py"
 

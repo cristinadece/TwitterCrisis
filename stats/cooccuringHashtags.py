@@ -89,12 +89,12 @@ def writeOutput(dictUserHashtagList, outputFile):
     output.close()
 
 
-def writeOutputJSON(dictUserHashtagList, outputFile):
-    output = codecs.open(outputFile, "w", "utf-8")
-    for item in dictUserHashtagList.iteritems():
-        output.write(json.dumps(item))
-        output.write('\n')
-    output.close()
+# def writeOutputJSON(dictUserHashtagList, outputFile):
+#     output = codecs.open(outputFile, "w", "utf-8")
+#     for item in dictUserHashtagList.iteritems():
+#         output.write(json.dumps(item))
+#         output.write('\n')
+#     output.close()
 
 
 def writeOutputPlainAndJSON(dictUserHashtagList, outputFile):
@@ -107,17 +107,17 @@ def writeOutputPlainAndJSON(dictUserHashtagList, outputFile):
     output.close()
 
 
-def writeOutputPlain(dictUserHashtagList, outputFile):
-    output = codecs.open(outputFile, "w", "utf-8")
-    for k, v in dictUserHashtagList.iteritems():
-        try:
-            hashtagsAsString = ",".join(list(set(v)))
-            s = k + '\t' + hashtagsAsString.encode("utf-8") + '\n'
-            # print s
-            output.write(s)
-        except TypeError:
-            print "couldn't coerce hashtags: ", k, v
-    output.close()
+# def writeOutputPlain(dictUserHashtagList, outputFile):
+#     output = codecs.open(outputFile, "w", "utf-8")
+#     for k, v in dictUserHashtagList.iteritems():
+#         try:
+#             hashtagsAsString = ",".join(list(set(v)))
+#             s = k + '\t' + hashtagsAsString.encode("utf-8") + '\n'
+#             # print s
+#             output.write(s)
+#         except UnicodeDecodeError:
+#             print "couldn't coerce hashtags: ", k, v
+#     output.close()
 
 
 if __name__ == '__main__':
@@ -156,8 +156,8 @@ if __name__ == '__main__':
     # writeOutputJSON2(usersWithANTIHashtags, outputANTI)
     # writeOutputJSON2(usersWithNEUTRALHashtags, outputNEUTRAL)
 
-    writeOutputPlain(usersWithPROHashtags, outputPRO)
-    writeOutputPlain(usersWithANTIHashtags, outputANTI)
-    writeOutputPlain(usersWithNEUTRALHashtags, outputNEUTRAL)
+    writeOutputPlainAndJSON(usersWithPROHashtags, outputPRO)
+    writeOutputPlainAndJSON(usersWithANTIHashtags, outputANTI)
+    writeOutputPlainAndJSON(usersWithNEUTRALHashtags, outputNEUTRAL)
 
     logger.info("Finished writing to file")

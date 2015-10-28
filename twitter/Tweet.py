@@ -19,7 +19,7 @@ class Tweet:
         return [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
 
     @staticmethod
-    def getTweetAsTweetTextTokens(path): #todo this is the same as __iter__ , iter should be replaced by this
+    def getTweetAsTweetTextTokens(path):  #todo this is the same as __iter__ , iter should be replaced by this
 
         if os.path.isdir(path):
             for fname in os.listdir(path):
@@ -32,7 +32,7 @@ class Tweet:
                     tweetText = tweet['text']
                     tokenList = Tweet.tokenizeTweetText(tweetText)
                     yield tokenList
-        else: #this means it is a file
+        else:  #this means it is a file
             for line in gzip.open(path):
                     try:
                         tweet = json.loads(line)
@@ -96,7 +96,7 @@ if __name__ == '__main__':
         #         "type":"Point"
         #     }
 
-        if j%10==0:
+        if j % 10 == 0:
             break
 
 
