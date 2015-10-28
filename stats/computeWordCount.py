@@ -3,12 +3,11 @@ from pandas import json
 import sys
 from collections import defaultdict
 import operator
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
 from util import ngrams
 import logging
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 __author__ = 'cris'
