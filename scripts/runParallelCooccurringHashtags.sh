@@ -3,7 +3,7 @@
 CORES=6
 INPUT_DIR=/home/muntean/english-tweets-09
 OUTPUT_DIR=/home/muntean/output-sem-coocc-hashtags
-COMMAND="python cooccuringHashtags.py"
+COMMAND="python ../stats/cooccuringHashtags.py"
 
 for LINE in `ls $INPUT_DIR/*.gz`
 do

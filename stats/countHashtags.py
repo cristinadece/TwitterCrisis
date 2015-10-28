@@ -1,19 +1,17 @@
 import codecs
-
-__author__ = 'muntean'
-
 import sys
 from collections import defaultdict, OrderedDict
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import logging
 
+__author__ = 'muntean'
+
 '''
 We read USER with hashtags file, count hashtags, write to file.
 We do this in order to discover new significant PRO, ANTI and NEUTRAL hashtags.
 
 Usage:
-
 python countHashtags.py ../../output-sem-coocc-hashtags-v1/ ANTI ../../output-sem-coocc-hashtags-v1/top-ANTI-hashtags.tsv
 
 '''
@@ -56,7 +54,7 @@ if __name__ == '__main__':
 
     logger.info('Started counting')
 
-    if len(sys.argv)!=4:
+    if len(sys.argv) != 4:
         print "You need to pass the following 3 params: <inputDIR> <ANTI/PRO/NEUTRAL> <outputFileForHashtagCount>"
         sys.exit(-1)
     inputDir = sys.argv[1]

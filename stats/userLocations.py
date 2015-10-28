@@ -1,7 +1,6 @@
 from pandas import json
 import sys
 import os
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
 from twitter.User import User
@@ -10,7 +9,7 @@ __author__ = 'cris'
 
 neutral_refugee = ['#refugeescrisis', '#syrianrefugees', '#refugees']
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad']#, "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad']
 
 
 def addUserToCorrespondingDict(userID, userType, userLocation, userScreenName, tweetPlace, tweetCoords, user_dict2):

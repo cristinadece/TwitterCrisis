@@ -2,8 +2,8 @@
 
 CORES=6
 INPUT_DIR=/home/muntean/english-tweets-09
-OUTPUT_DIR=/home/muntean/output-sem
-COMMAND="python computeWordCount.py"
+OUTPUT_DIR=/home/muntean/output-sem-user-loc
+COMMAND="python ../stats/userLocations.py"
 
 for LINE in `ls $INPUT_DIR/*.gz`
 do
