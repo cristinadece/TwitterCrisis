@@ -4,13 +4,12 @@ import json
 import logging
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util import ngrams
 from twitter.Tweet import Tweet
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 __author__ = 'cris'
-
 
 '''
 This script computes cooccuring hashtags (from relevant users) with few preselected
@@ -23,9 +22,9 @@ Parallel version:
 
 '''
 
-neutral_refugee= ['#refugeescrisis', '#syrianrefugees', '#refugees' ]
+neutral_refugee = ['#refugeescrisis', '#syrianrefugees', '#refugees']
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad'] #, "#teenchoiceawards"]
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad']
 
 
 def tagUsers(tweetsAsDictionary):
@@ -36,38 +35,38 @@ def tagUsers(tweetsAsDictionary):
 
     i = 0
     for tweet in tweetsAsDictionary:
-        tweetText = tweet['text'].lower() #todo remember to lowercase everything
+        tweetText = tweet['text'].lower()  # todo remember to lowercase everything
         userID = tweet['user']['id_str']
         userScreenName = tweet['user']['screen_name']
-        i+=1
+        i += 1
         # if i%100000==0:
         #     break
-        if i%10000==0:
+        if i % 10000 == 0:
             print 'processing tweets: ', i
         if any(r in tweetText for r in anti_refugee):
             anti_refugee_users.add(userID)
-            screen_name_dict["ANTI"].add((str(userID),str(userScreenName)))
+            screen_name_dict["ANTI"].add((str(userID), str(userScreenName)))
         elif any(r in tweetText for r in pro_refugee):
             pro_refugee_users.add(userID)
-            screen_name_dict["PRO"].add((str(userID),str(userScreenName)))
+            screen_name_dict["PRO"].add((str(userID), str(userScreenName)))
         elif any(r in tweetText for r in neutral_refugee):
             neutral_refugee_users.add(userID)
-            screen_name_dict["NEUTRAL"].add((str(userID),str(userScreenName)))
+            screen_name_dict["NEUTRAL"].add((str(userID), str(userScreenName)))
 
     return [pro_refugee_users, anti_refugee_users, neutral_refugee_users, screen_name_dict]
 
 
 def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_users, neutral_refugee_users):
-    i=0
+    i = 0
     usersWithPROHashtags = defaultdict(list)
     usersWithANTIHashtags = defaultdict(list)
     usersWithNEUTRALHashtags = defaultdict(list)
 
     for tweet in tweetsAsDictionary:
-        i+=1
+        i += 1
         # if i%100000==0:
         #     break
-        if i%10000==0:
+        if i % 10000 == 0:
             print 'processing tweets: ', i
         tweetText = Tweet.tokenizeTweetText(tweet['text'])
         if tweet['user']['id_str'] in anti_refugee_users:
@@ -85,8 +84,8 @@ def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_us
 
 def writeOutput(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
-    for k,v in dictUserHashtagList.iteritems():
-        output.write('{}\t{}\n'.format(k,v))
+    for k, v in dictUserHashtagList.iteritems():
+        output.write('{}\t{}\n'.format(k, v))
     output.close()
 
 
@@ -98,35 +97,34 @@ def writeOutputJSON(dictUserHashtagList, outputFile):
     output.close()
 
 
-### do we want the hashtags unique per user per tweet? or per user .
-### now is per user
 def writeOutputPlainAndJSON(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
-    for k,v in dictUserHashtagList.iteritems():
+    for k, v in dictUserHashtagList.iteritems():
         hashtagsAsString = ",".join(list(set(v)))
-        output.write(k+'\t'+json.dumps(hashtagsAsString).replace('"', '')) #todo: this is too strange
+        output.write(
+            k + '\t' + json.dumps(hashtagsAsString).replace('"', ''))  # todo: this is too strange, but it works
         output.write('\n')
     output.close()
 
+
 def writeOutputPlain(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
-    for k,v in dictUserHashtagList.iteritems():
+    for k, v in dictUserHashtagList.iteritems():
         try:
             hashtagsAsString = ",".join(list(set(v)))
             s = k + '\t' + hashtagsAsString.encode("utf-8") + '\n'
-            #print s
+            # print s
             output.write(s)
         except TypeError:
             print "couldn't coerce hashtags: ", k, v
-
     output.close()
 
 
 if __name__ == '__main__':
 
-
-    if len(sys.argv)!=6:
-        print "You need to pass the following 2 params: <tweetDirectory> <userFile> <outputFileForUsersWithHashtagsPRO> <outputFileForUsersWithHashtagsANTI> <outputFileForUsersWithHashtagsNEUTRAL>"
+    if len(sys.argv) != 6:
+        print "Need to pass the following params: <tweetDirectory> <userFile> <outputFileForUsersWithHashtagsPRO> " \
+              "<outputFileForUsersWithHashtagsANTI> <outputFileForUsersWithHashtagsNEUTRAL>"
         sys.exit(-1)
     tweetDir = sys.argv[1]
     userFile = sys.argv[2]
@@ -151,7 +149,8 @@ if __name__ == '__main__':
     logger.info('Started computing coocurring hashtags per users')
 
     tweetsAsDict = Tweet().getTweetAsDictionary(tweetDir)
-    [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos, neg, neu)
+    [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos,
+                                                                                                    neg, neu)
 
     # writeOutputJSON2(usersWithPROHashtags, outputPRO)
     # writeOutputJSON2(usersWithANTIHashtags, outputANTI)
@@ -161,6 +160,4 @@ if __name__ == '__main__':
     writeOutputPlain(usersWithANTIHashtags, outputANTI)
     writeOutputPlain(usersWithNEUTRALHashtags, outputNEUTRAL)
 
-
     logger.info("Finished writing to file")
-
