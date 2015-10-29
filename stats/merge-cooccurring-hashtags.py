@@ -11,8 +11,11 @@ __author__ = 'muntean'
 We read USER with hashtags file, count hashtags, write to file.
 We do this in order to discover new significant PRO, ANTI and NEUTRAL hashtags.
 
+* the case here is special because for the same user we might have to lists, so we put them together and create a set
+so as to remove duplicate!
+
 Usage:
-python countHashtags.py ../../output-sem-coocc-hashtags-v1/ ANTI ../../output-sem-coocc-hashtags-v1/top-ANTI-hashtags.tsv
+python merge-cooccurring-hashtags.py ../../output-sem-coocc-hashtags-v1/ ANTI ../../output-sem-coocc-hashtags-v1/top-ANTI-hashtags.tsv
 
 '''
 
@@ -49,7 +52,7 @@ def writeOutputPlain(sortedHashtags, outputFile):
     output.close()
 
 if __name__ == '__main__':
-    logger = logging.getLogger("countHashtags.py")
+    logger = logging.getLogger("merge-cooccurring-hashtags.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
     logger.info('Started counting')

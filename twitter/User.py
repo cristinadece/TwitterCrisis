@@ -41,3 +41,8 @@ class User:
         if coord is not None:
             self.tweet_coordinates.append(coord)
 
+
+    # ["216905308",{"id":"216905308","screen_name":"AishathShakeela","tweet_coordinates":[],"type":"NEUTRAL"}]
+    @staticmethod
+    def parseStringToUser(dict):
+        pass

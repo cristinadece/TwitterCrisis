@@ -107,19 +107,6 @@ def writeOutputPlainAndJSON(dictUserHashtagList, outputFile):
     output.close()
 
 
-# def writeOutputPlain(dictUserHashtagList, outputFile):
-#     output = codecs.open(outputFile, "w", "utf-8")
-#     for k, v in dictUserHashtagList.iteritems():
-#         try:
-#             hashtagsAsString = ",".join(list(set(v)))
-#             s = k + '\t' + hashtagsAsString.encode("utf-8") + '\n'
-#             # print s
-#             output.write(s)
-#         except UnicodeDecodeError:
-#             print "couldn't coerce hashtags: ", k, v
-#     output.close()
-
-
 if __name__ == '__main__':
 
     if len(sys.argv) != 6:
@@ -151,10 +138,6 @@ if __name__ == '__main__':
     tweetsAsDict = Tweet().getTweetAsDictionary(tweetDir)
     [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos,
                                                                                                     neg, neu)
-
-    # writeOutputJSON2(usersWithPROHashtags, outputPRO)
-    # writeOutputJSON2(usersWithANTIHashtags, outputANTI)
-    # writeOutputJSON2(usersWithNEUTRALHashtags, outputNEUTRAL)
 
     writeOutputPlainAndJSON(usersWithPROHashtags, outputPRO)
     writeOutputPlainAndJSON(usersWithANTIHashtags, outputANTI)
