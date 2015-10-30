@@ -1,3 +1,4 @@
+import pickle
 import sys
 import os
 import jsonpickle
@@ -63,6 +64,30 @@ def getUsersWithLocation(tweetsAsDictionary):
 
     return user_dict
 
+def printToFilePlain(user_dict, output):
+    outputFILE = open(output, "w")
+    #print obj as dict
+    for k,v in user_dict.iteritems():
+        # is there any value equal to None?
+        outputFILE.write(k + "\t" + v.toJson() + "\n")
+    outputFILE.close()
+
+
+def printToFileJSONPickle(user_dict, output):
+    outputFILE = open(output, "w")
+    #print and serialize with pickle
+    for item in user_dict.iteritems():
+        outputFILE.write(jsonpickle.encode(item) + '\n')
+    outputFILE.close()
+
+def printToFilePickle(user_dict, output):
+    outputFILE = open(output, "wb")
+    # print and serialize with pickle
+    for item in user_dict.iteritems():
+        pickle.dump(item, outputFILE)
+        outputFILE.flush()
+    outputFILE.close()
+
 
 if __name__ == '__main__':
 
@@ -75,22 +100,16 @@ if __name__ == '__main__':
     tweets = Tweet.getTweetAsDictionary(tweetDir)
     user_dict = getUsersWithLocation(tweets)
 
-    outputFILE = open(output, "w")
-
-    # print obj as dict
-    # for k,v in user_dict.iteritems():
-    #     # is there any value equal to None?
-    #     outputFILE.write(k + "\t" + v.toJson() + "\n")
-
-
-    # print and serialize with pickle
-    for item in user_dict.iteritems():
-        # is there any value equal to None?
-        outputFILE.write(jsonpickle.encode(item) + '\n')
-    outputFILE.close()
+    printToFilePickle(user_dict, output)
 
     #sanitycheck
-    inputFILE = open(output, "r")
-    for line in inputFILE:
-        print jsonpickle.decode(line)
-    inputFILE.close()
+    inputFILE = open(output, "rb")
+    with open(output, "rb") as inputFILE:
+        # Read the data
+        while True:
+            try:
+                o = pickle.load(inputFILE)
+            except EOFError:
+                print "EOFError !"
+                break
+
