@@ -43,6 +43,7 @@ class User:
 
 
     # ["216905308",{"id":"216905308","screen_name":"AishathShakeela","tweet_coordinates":[],"type":"NEUTRAL"}]
+    # pickle
     @staticmethod
     def parseStringToUser(dict):
         pass

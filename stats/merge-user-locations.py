@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import sys
+import jsonpickle
 
 __author__ = 'muntean'
 
@@ -37,10 +38,37 @@ def buildUserLocationDict(path):
 
     return userHashDict
 
+def buildUserLocationDictWithPickle(path):
+    userHashDict = dict()
+    if os.path.isdir(path):
+        for fname in os.listdir(path):
+            inputFile = codecs.open(os.path.join(path, fname), 'r', 'utf8')
+            for line in inputFile:
+                data = jsonpickle.decode(line)
+                userID = data[0]
+                userInfo = data[1]  #this is an object
+                if userID in userHashDict:
+                    # new info
+                    tweetCoords = userInfo.tweet_coordinates
+                    tweerLocations = userInfo.tweet_locations
+
+                    # preexisting info
+                    userData = userHashDict[userID]
+
+                    #adding new info to preexsiting info
+                    userData.setTweetRelatedUserAttributes(tweerLocations, tweetCoords)
+                else:
+                    userHashDict[userID].update(userInfo)
+    else:
+        print "This is not a directory!"
+
+    return userHashDict
+
 def writeOutputPlain(userDict, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
-    for item in userDict.iteritems():
-        output.write(json.dumps(item) + "\n")
+    for k,v in userDict.iteritems():
+        #output.write(json.dumps(item) + "\n")
+        output.write(k + "\t" + v.toJson() + "\n")
     output.close()
 
 if __name__ == '__main__':
@@ -56,7 +84,7 @@ if __name__ == '__main__':
     outputFile = sys.argv[2]
 
     # build user dict with hashtag set
-    userLocationDict = buildUserLocationDict(inputDir)
+    userLocationDict = buildUserLocationDictWithPickle(inputDir)
 
     # print to file
     writeOutputPlain(userLocationDict, outputFile)

@@ -1,6 +1,6 @@
-from pandas import json
 import sys
 import os
+import jsonpickle
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
 from twitter.User import User
@@ -9,7 +9,7 @@ __author__ = 'cris'
 
 neutral_refugee = ['#refugeescrisis', '#syrianrefugees', '#refugees']
 pro_refugee = ['#refugeeswelcome', '#refugeesnotmigrants', '#refugeesnotpawns', '#saverefugees', '#welcomerefugees']
-anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad']
+anti_refugee = ['#nomorerefugees', '#refugeesnotwelcome', '#norefugees', '#refugeejihad', '#teenchoiceawards']
 
 
 def addUserToCorrespondingDict(userID, userType, userLocation, userScreenName, tweetPlace, tweetCoords, user_dict2):
@@ -76,8 +76,21 @@ if __name__ == '__main__':
     user_dict = getUsersWithLocation(tweets)
 
     outputFILE = open(output, "w")
-    for u in user_dict.iteritems():
-        # is there any value equal to None?
-        outputFILE.write(json.dumps(u) + "\n")
 
+    # print obj as dict
+    # for k,v in user_dict.iteritems():
+    #     # is there any value equal to None?
+    #     outputFILE.write(k + "\t" + v.toJson() + "\n")
+
+
+    # print and serialize with pickle
+    for item in user_dict.iteritems():
+        # is there any value equal to None?
+        outputFILE.write(jsonpickle.encode(item) + '\n')
     outputFILE.close()
+
+    #sanitycheck
+    inputFILE = open(output, "r")
+    for line in inputFILE:
+        print jsonpickle.decode(line)
+    inputFILE.close()
