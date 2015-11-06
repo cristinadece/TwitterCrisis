@@ -46,14 +46,27 @@ def tagUsers(tweetsAsDictionary):
         if any(r in tweetText for r in anti_refugee):
             anti_refugee_users.add(userID)
             screen_name_dict["ANTI"].add((str(userID), str(userScreenName)))
-        elif any(r in tweetText for r in pro_refugee):
+        if any(r in tweetText for r in pro_refugee):
             pro_refugee_users.add(userID)
             screen_name_dict["PRO"].add((str(userID), str(userScreenName)))
-        elif any(r in tweetText for r in neutral_refugee):
+        if any(r in tweetText for r in neutral_refugee):
             neutral_refugee_users.add(userID)
             screen_name_dict["NEUTRAL"].add((str(userID), str(userScreenName)))
 
     return [pro_refugee_users, anti_refugee_users, neutral_refugee_users, screen_name_dict]
+
+def tagHashtagsOnCooccurrence(tweetsAsDictionary):
+    hashtagsDict = dict()
+
+
+    for tweet in tweetsAsDictionary:
+        tweetText = tweet['text'].lower()
+        tweetTokens = Tweet.tokenizeTweetText(tweetText)
+        hashtags = set([x for x in tweetTokens if x.startswith('#')])
+
+        if len(hashtags)!=0:
+            if not hashtags.isdisjoint(anti_refugee):
+                pass
 
 
 def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_users, neutral_refugee_users):

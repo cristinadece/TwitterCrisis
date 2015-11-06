@@ -19,7 +19,7 @@ class Tweet:
         return [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
 
     @staticmethod
-    def getTweetAsTweetTextTokens(path):  #todo this is the same as __iter__ , iter should be replaced by this
+    def getTweetAsTweetTextTokens(path):
 
         if os.path.isdir(path):
             for fname in os.listdir(path):
