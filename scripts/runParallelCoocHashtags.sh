@@ -10,7 +10,7 @@ COMMAND="time python ../stats/cooccuringHashtags.py"
 for LINE in `ls $INPUT_DIR/*.gz`
 do
 	OUTPUT_NAME=`basename $LINE | cut -d'.' -f1`
-	sem -j $CORES $COMMAND $LINE $OUTPUT_DIR/user-type-${OUTPUT_NAME}.output $OUTPUT_DIR/${OUTPUT_NAME}-PRO-hashtags.output $OUTPUT_DIR/${OUTPUT_NAME}-ANTI-hashtags.output $OUTPUT_DIR/${OUTPUT_NAME}-NEUTRAL-hashtags.output
+	sem -j $CORES $COMMAND $LINE $OUTPUT_DIR/hashtag-cooc-${OUTPUT_NAME}.output 
 done
 sem --wait
 exit 0

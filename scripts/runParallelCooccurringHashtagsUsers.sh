@@ -3,7 +3,7 @@
 CORES=27
 #INPUT_DIR=/home/muntean/english-tweets-09
 INPUT_DIR=/data/tweets
-OUTPUT_DIR=/home/muntean/output-sem-coocc-hashtags-09
+OUTPUT_DIR=/home/muntean/output-sem-coocc-hashtags-by-users-09
 COMMAND="time python ../stats/cooccuringHashtagsByUsers.py"
 
 for LINE in `ls $INPUT_DIR/*.gz`
