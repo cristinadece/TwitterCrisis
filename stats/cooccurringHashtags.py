@@ -15,7 +15,7 @@ __author__ = 'cris'
 '''
 This script computes cooccuring hashtags (from relevant users) with few preselected
 Run it:
-<python cooccuringHashtagsByUsers.py ../../../../english-tweets ../../../../users-by-type.json
+<python cooccurringHashtagsByUsers.py ../../../../english-tweets ../../../../users-by-type.json
 ../../../../cooc-hashtags-Pro.json ../../../../cooc-hashtags-Anti.json ../../../../cooc-hashtags-Neutral.json>
 
 Parallel version:
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     outputFile = sys.argv[2]
 
 
-    logger = logging.getLogger("computerWordCount.py")
+    logger = logging.getLogger("cooccurringHashtags.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
     logger.info('Computing hashtag cooccurences')
