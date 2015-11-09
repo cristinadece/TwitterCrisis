@@ -86,6 +86,7 @@ def tagHashtagsOnCooccurrence(tweetsAsDictionary):
 def writeCoocurrencesInOutput(coocurences, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for hashtag, cooccurenceList in coocurences.iteritems():
+        coocTotal = len(cooccurenceList)
         countCoocs = Counter(cooccurenceList)
         coocTypes = defaultdict(int)
 
@@ -99,7 +100,7 @@ def writeCoocurrencesInOutput(coocurences, outputFile):
 
         freqs = ' '.join('{}:{}'.format(key, val) for key, val in coocTypes.items())
         coocs = ','.join(countCoocs.keys())
-        output.write('{}\t{}\t{}\n'.format(hashtag, freqs, coocs))
+        output.write('{}\t{}\t{}\t{}\n'.format(hashtag, coocTotal, freqs, coocs))
     output.close()
 
 
