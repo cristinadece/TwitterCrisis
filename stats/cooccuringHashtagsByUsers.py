@@ -14,7 +14,7 @@ __author__ = 'cris'
 '''
 This script computes cooccuring hashtags (from relevant users) with few preselected
 Run it:
-<python cooccuringHashtags.py ../../../../english-tweets ../../../../users-by-type.json
+<python cooccuringHashtagsByUsers.py ../../../../english-tweets ../../../../users-by-type.json
 ../../../../cooc-hashtags-Pro.json ../../../../cooc-hashtags-Anti.json ../../../../cooc-hashtags-Neutral.json>
 
 Parallel version:
@@ -54,19 +54,6 @@ def tagUsers(tweetsAsDictionary):
             screen_name_dict["NEUTRAL"].add((str(userID), str(userScreenName)))
 
     return [pro_refugee_users, anti_refugee_users, neutral_refugee_users, screen_name_dict]
-
-def tagHashtagsOnCooccurrence(tweetsAsDictionary):
-    hashtagsDict = dict()
-
-
-    for tweet in tweetsAsDictionary:
-        tweetText = tweet['text'].lower()
-        tweetTokens = Tweet.tokenizeTweetText(tweetText)
-        hashtags = set([x for x in tweetTokens if x.startswith('#')])
-
-        if len(hashtags)!=0:
-            if not hashtags.isdisjoint(anti_refugee):
-                pass
 
 
 def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_users, neutral_refugee_users):

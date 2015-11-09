@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 
 CORES=27
 #INPUT_DIR=/home/muntean/english-tweets-09
