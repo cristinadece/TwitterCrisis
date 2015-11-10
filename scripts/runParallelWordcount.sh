@@ -1,10 +1,10 @@
 #!/bin/bash
 
-CORES=6
+CORES=27
 #INPUT_DIR=/home/muntean/english-tweets-09
 INPUT_DIR=/data/tweets
-OUTPUT_DIR=/home/muntean/output-sem
-COMMAND="python ../stats/computeWordCount.py"
+OUTPUT_DIR=/home/muntean/output-sem-wordcount
+COMMAND="time python ../stats/computeWordCount.py"
 
 for LINE in `ls $INPUT_DIR/*.gz`
 do
