@@ -100,7 +100,7 @@ def writeCoocurrencesInOutput(coocurences, outputFile):
 
         freqs = ' '.join('{}:{}'.format(key, val) for key, val in coocTypes.items())
         coocs = ','.join(countCoocs.keys())
-        output.write('{}\t{}\t{}\t{}\n'.format(hashtag, coocTotal, freqs, coocs))
+        output.write('{}\t{}\t{}\t{}\n'.format(json.dumps(hashtag).replace('"', ''), coocTotal, freqs, coocs))
     output.close()
 
 
