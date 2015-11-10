@@ -31,6 +31,11 @@ def printTSV(sorted_wc, outputfile):
         output.write(u'{}\t{}\n'.format(k, v))  #.encode('utf-8',errors='ignore'))
     output.close()
 
+def printUTF8(sorted_wc, outputfile):
+    output = codecs.open(outputfile, "w", "utf-8")
+    for k, v in sorted_wc:
+        output.write('{}\t{}\n'.format(json.dumps(k).replace('"', ''), v))  #.encode('utf-8',errors='ignore'))
+    output.close()
 
 def wordcountPlain(tweets, onlyHashtags=False, ngram=1):
     wordcount = defaultdict(int)
@@ -72,7 +77,8 @@ if __name__ == '__main__':
     tweetsAsTokens = Tweet.getTweetAsTweetTextTokens(tweetDir)
 
     sorted_wordcount = wordcountPlain(tweetsAsTokens, False, 2)
-    printTSV(sorted_wordcount, output)
+    # printTSV(sorted_wordcount, output)
     # printJson(sorted_wordcount, output)
+    printUTF8(sorted_wordcount, output)
 
     logger.info('Finished counting and writing to file')
