@@ -5,13 +5,15 @@ import logging
 import os
 import sys
 
+from util import ngrams
+
 __author__ = 'muntean'
 
 '''
 This is needed for merging the wordcount
 '''
 
-def buildWordcountDict(path):
+def buildWordcountDict(path, ifHashtagsOnly):
     wordcountDict = defaultdict()
     if os.path.isdir(path):
         for fname in os.listdir(path):
@@ -20,7 +22,11 @@ def buildWordcountDict(path):
                 data = line.split("\t")
                 word = data[0]
                 count = int(data[1])
-                wordcountDict[word] +=count
+                if ifHashtagsOnly:
+                    if ngrams.is_hashtag(word):
+                        wordcountDict[word] +=count
+                else:
+                    wordcountDict[word] +=count
     else:
         print "This is not a directory!"
 
@@ -38,11 +44,12 @@ if __name__ == '__main__':
 
     logger.info('Started counting')
 
-    if len(sys.argv) != 3:
-        print "You need to pass the following 3 params: <inputDIR> <outputFileForWordCount>"
+    if len(sys.argv) != 4:
+        print "You need to pass the following 3 params: <inputDIR> <outputFileForWordCount> <1 for hashtags only, 0 for everything>"
         sys.exit(-1)
     inputDir = sys.argv[1]
     outputFile = sys.argv[2]
+    ifHashtagsOnly = sys.argv[3]
 
     # build user dict with hashtag set
     userLocationDict = buildWordcountDict(inputDir)
