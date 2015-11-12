@@ -1,10 +1,9 @@
 import codecs
 from collections import defaultdict
-import json
 import logging
 import os
 import sys
-
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util import ngrams
 
 __author__ = 'muntean'
