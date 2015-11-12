@@ -21,7 +21,7 @@ def buildWordcountDict(path, ifHashtagsOnly):
                 data = line.split("\t")
                 word = data[0]
                 count = int(data[1])
-                if ifHashtagsOnly:
+                if ifHashtagsOnly==1:
                     if ngrams.is_hashtag(word):
                         wordcountDict[word] +=count
                 else:
@@ -48,10 +48,10 @@ if __name__ == '__main__':
         sys.exit(-1)
     inputDir = sys.argv[1]
     outputFile = sys.argv[2]
-    ifHashtagsOnly = sys.argv[3]
+    ifHashtagsOnly = int(sys.argv[3])
 
     # build user dict with hashtag set
-    userLocationDict = buildWordcountDict(inputDir)
+    userLocationDict = buildWordcountDict(inputDir, ifHashtagsOnly)
 
     # print to file
     writeOutputPlain(userLocationDict, outputFile)
