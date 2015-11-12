@@ -21,11 +21,12 @@ def buildWordcountDict(path, ifHashtagsOnly):
                 data = line.split("\t")
                 word = data[0]
                 count = int(data[1])
-                if ifHashtagsOnly==1:
+                if ifHashtagsOnly == 1:
                     if ngrams.is_hashtag(word):
-                        wordcountDict[word] +=count
+                        print word
+                        wordcountDict[word] += count
                 else:
-                    wordcountDict[word] +=count
+                    wordcountDict[word] += count
     else:
         print "This is not a directory!"
 
