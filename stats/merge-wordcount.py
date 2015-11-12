@@ -13,7 +13,7 @@ This is needed for merging the wordcount
 '''
 
 def buildWordcountDict(path, ifHashtagsOnly):
-    wordcountDict = defaultdict()
+    wordcountDict = defaultdict(int)
     if os.path.isdir(path):
         for fname in os.listdir(path):
             inputFile = codecs.open(os.path.join(path, fname), 'r', 'utf8')
@@ -35,7 +35,7 @@ def buildWordcountDict(path, ifHashtagsOnly):
 def writeOutputPlain(wordcountDict, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k,v in wordcountDict.iteritems():
-        output.write(k + "\t" + v + "\n")
+        output.write(k + "\t" + str(v) + "\n")
     output.close()
 
 if __name__ == '__main__':
