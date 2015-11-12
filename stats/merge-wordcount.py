@@ -19,7 +19,7 @@ def buildWordcountDict(path, ifHashtagsOnly):
             inputFile = codecs.open(os.path.join(path, fname), 'r', 'utf8')
             for line in inputFile:
                 data = line.split("\t")
-                word = data[0]
+                word = str(data[0])
                 count = int(data[1])
                 if ifHashtagsOnly == 1:
                     if ngrams.is_hashtag(word):
