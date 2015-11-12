@@ -23,7 +23,6 @@ def buildWordcountDict(path, ifHashtagsOnly):
                 count = int(data[1])
                 if ifHashtagsOnly == 1:
                     if ngrams.is_hashtag(word):
-                        print word
                         wordcountDict[word] += count
                 else:
                     wordcountDict[word] += count
