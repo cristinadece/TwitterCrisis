@@ -56,9 +56,10 @@ def mergeAndPrintHashtagsStats(hashtagDict, outputFile):
                 totalCoocFreq, freqByCateg, seedList = item.split('\t')
                 freqTotal += int(totalCoocFreq)
                 coocSeeds.update(seedList.split(','))
-                typeFreq = freqByCateg.split(" ")
+                typeFreq = freqByCateg.split(' ')
                 for entry in typeFreq:
-                    coocTypes[entry[0]] += int(entry[1])
+                    freq = entry[1]
+                    coocTypes[entry[0]] += int(freq)
 
             freqs = ' '.join('{}:{}'.format(key, val) for key, val in coocTypes.items())
             coocs = ','.join(coocSeeds)
