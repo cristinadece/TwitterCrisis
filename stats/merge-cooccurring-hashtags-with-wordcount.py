@@ -53,6 +53,7 @@ def mergeAndPrintHashtagsStats(hashtagDict, outputFile):
             coocSeeds = set()
 
             for item in hashtagData:
+                print item
                 totalCoocFreq, freqByCateg, seedList = item.split('\t')
                 freqTotal += int(totalCoocFreq)
                 coocSeeds.update(seedList.split(','))
@@ -89,6 +90,7 @@ if __name__ == '__main__':
 
     # merging hashtags from multiple files in a dict
     hashtagsDict = loadHashtagDict(inputDir)
+    print "Num of hashtags: ", len(hashtagsDict)
 
     # count global frequencies and print to file
     mergeAndPrintHashtagsStats(hashtagsDict, outputFile)
