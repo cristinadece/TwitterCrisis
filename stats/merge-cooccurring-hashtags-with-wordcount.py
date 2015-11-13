@@ -42,7 +42,7 @@ def loadHashtagDict(path):
 
     return hashtagDict
 
-def mergeAndPrintHashtagsStats(hashtagDict, outputFile):
+def mergeAndPrintHashtagsStats(hashtagDict, wordcountDict, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     coocTypes = defaultdict(int)  # create this one time, then clear after each record
 
@@ -58,16 +58,16 @@ def mergeAndPrintHashtagsStats(hashtagDict, outputFile):
                 coocSeeds.update(seedList.split(','))
                 typeFreq = freqByCateg.split(' ')
                 for entry in typeFreq:
-		    miniFreqs = entry.split(':')
+                    miniFreqs = entry.split(':')
                     coocTypes[miniFreqs[0]] += int(miniFreqs[1])
 
             freqs = ' '.join('{}:{}'.format(key, val) for key, val in coocTypes.items())
             coocs = ','.join(coocSeeds)
 
-            output.write('{}\t{}\t{}\t{}\n'.format(hashtag, freqTotal, freqs, coocs))
+            output.write('{}\t{}\t{}\t{}\t{}\n'.format(hashtag, freqTotal, freqs, coocs, wordcountDict[hashtag]))
             coocTypes.clear()
         else:
-            output.write('{}\t{}\n'.format(hashtag, hashtagData[0]))
+            output.write('{}\t{}\t{}\n'.format(hashtag, hashtagData[0], wordcountDict[hashtag]))
     output.close()
 
 
@@ -85,14 +85,15 @@ if __name__ == '__main__':
     outputFile = sys.argv[3]
 
     # load wordcount
-    # wcDict = loadWC(wordcountFile)
+    wcDict = loadWC(wordcountFile)
+    print "Loaded Wordcount"
 
     # merging hashtags from multiple files in a dict
     hashtagsDict = loadHashtagDict(inputDir)
     print "Num of hashtags: ", len(hashtagsDict)
 
     # count global frequencies and print to file
-    mergeAndPrintHashtagsStats(hashtagsDict, outputFile)
+    mergeAndPrintHashtagsStats(hashtagsDict, wcDict, outputFile)
 
     logger.info('Finished counting and writing to file')
 
