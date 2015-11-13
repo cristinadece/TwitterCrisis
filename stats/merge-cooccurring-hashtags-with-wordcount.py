@@ -35,7 +35,7 @@ def loadHashtagDict(path):
             for line in inputFile:
                 items = line.replace('\n', '').split('\t', 1)
                 hashtag = items[0]
-                hashtagData = set(items[1].split(','))
+                hashtagData = items[1]
                 hashtagDict[hashtag].append(hashtagData)
     else:
         print "This is not a directory!"
@@ -71,7 +71,7 @@ def mergeAndPrintHashtagsStats(hashtagDict, outputFile):
 
 
 if __name__ == '__main__':
-    logger = logging.getLogger("merge-cooccurring-hashtags-users.py")
+    logger = logging.getLogger("merge-cooccurring-hashtags-with-wordcount.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
     logger.info('Started counting')
