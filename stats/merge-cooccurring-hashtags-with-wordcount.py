@@ -53,14 +53,13 @@ def mergeAndPrintHashtagsStats(hashtagDict, outputFile):
             coocSeeds = set()
 
             for item in hashtagData:
-                print item
                 totalCoocFreq, freqByCateg, seedList = item.split('\t')
                 freqTotal += int(totalCoocFreq)
                 coocSeeds.update(seedList.split(','))
                 typeFreq = freqByCateg.split(' ')
                 for entry in typeFreq:
-                    freq = entry[1]
-                    coocTypes[entry[0]] += int(freq)
+		    miniFreqs = entry.split(':')
+                    coocTypes[miniFreqs[0]] += int(miniFreqs[1])
 
             freqs = ' '.join('{}:{}'.format(key, val) for key, val in coocTypes.items())
             coocs = ','.join(coocSeeds)
@@ -68,7 +67,7 @@ def mergeAndPrintHashtagsStats(hashtagDict, outputFile):
             output.write('{}\t{}\t{}\t{}\n'.format(hashtag, freqTotal, freqs, coocs))
             coocTypes.clear()
         else:
-            output.write('{}\t{}\n'.format(hashtag, hashtagData))
+            output.write('{}\t{}\n'.format(hashtag, hashtagData[0]))
     output.close()
 
 
