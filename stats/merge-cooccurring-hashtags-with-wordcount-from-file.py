@@ -29,16 +29,12 @@ def loadWC(wordcountFile):
 # we load a dict <hashtag, list[corresponding strings form different files]> without parsing the values
 def loadHashtagDict(path):
     hashtagDict = defaultdict(list)
-    if os.path.isdir(path):
-        for fname in os.listdir(path):
-            inputFile = codecs.open(os.path.join(path, fname), 'r', 'utf8')
-            for line in inputFile:
-                items = line.replace('\n', '').split('\t', 1)
-                hashtag = items[0]
-                hashtagData = items[1]
-                hashtagDict[hashtag].append(hashtagData)
-    else:
-        print "This is not a directory!"
+    inputFile = codecs.open(path, 'r', 'utf8')
+    for line in inputFile:
+        items = line.replace('\n', '').split('\t', 1)
+        hashtag = items[0]
+        hashtagData = items[1]
+        hashtagDict[hashtag].append(hashtagData)
 
     return hashtagDict
 
@@ -47,27 +43,7 @@ def mergeAndPrintHashtagsStats(hashtagDict, wordcountDict, outputFile):
     coocTypes = defaultdict(int)  # create this one time, then clear after each record
 
     for hashtag, hashtagData in hashtagDict.iteritems():
-        if len(hashtagData) > 1:
-
-            freqTotal = 0
-            coocSeeds = set()
-
-            for item in hashtagData:
-                totalCoocFreq, freqByCateg, seedList = item.split('\t')
-                freqTotal += int(totalCoocFreq)
-                coocSeeds.update(seedList.split(','))
-                typeFreq = freqByCateg.split(' ')
-                for entry in typeFreq:
-                    miniFreqs = entry.split(':')
-                    coocTypes[miniFreqs[0]] += int(miniFreqs[1])
-
-            freqs = ' '.join('{}:{}'.format(key, val) for key, val in coocTypes.items())
-            coocs = ','.join(coocSeeds)
-
-            output.write('{}\t{}\t{}\t{}\t{}\n'.format(hashtag, freqTotal, freqs, coocs, wordcountDict[hashtag]))
-            coocTypes.clear()
-        else:
-            output.write('{}\t{}\t{}\n'.format(hashtag, hashtagData[0], wordcountDict[hashtag]))
+    	output.write('{}\t{}\t{}\n'.format(hashtag, hashtagData[0], wordcountDict[hashtag]))
     output.close()
 
 
