@@ -1,4 +1,5 @@
 import codecs
+import re
 from collections import defaultdict
 import json
 import logging
@@ -38,11 +39,11 @@ def tagUsers(tweetsAsDictionary):
         tweetText = tweet['text'].lower()  # todo remember to lowercase everything
         userID = tweet['user']['id_str']
         userScreenName = tweet['user']['screen_name']
+
         i += 1
-        # if i%100000==0:
-        #     break
         if i % 10000 == 0:
             print 'processing tweets: ', i
+
         if any(r in tweetText for r in anti_refugee):
             anti_refugee_users.add(userID)
             screen_name_dict["ANTI"].add((str(userID), str(userScreenName)))
@@ -54,6 +55,36 @@ def tagUsers(tweetsAsDictionary):
             screen_name_dict["NEUTRAL"].add((str(userID), str(userScreenName)))
 
     return [pro_refugee_users, anti_refugee_users, neutral_refugee_users, screen_name_dict]
+
+
+def resolveAmbiguousUsers(pro_refugee_users, anti_refugee_users, neutral_refugee_users, tweetDir):
+    Anti_Pro_users = anti_refugee_users & pro_refugee_users
+    Pro_Neutral_users = pro_refugee_users & neutral_refugee_users
+    Anti_Neutral_users = anti_refugee_users & neutral_refugee_users
+    all_intersection = anti_refugee_users & pro_refugee_users & neutral_refugee_users
+
+    sure_Anti = anti_refugee_users - pro_refugee_users - neutral_refugee_users
+    sure_Pro = pro_refugee_users - anti_refugee_users - neutral_refugee_users
+    sure_Neutral = neutral_refugee_users - anti_refugee_users - pro_refugee_users
+
+    date = re.findall('(\d+)', tweetDir)[0]
+
+    output = open("some-stats-" + date + ".tsv", "w")
+    output.write( "Anti Total: " + str(len(anti_refugee_users)) + "\n")
+    output.write( "Pro Total: " + str(len(pro_refugee_users)) + "\n")
+    output.write( "Neutral Total: " + str(len(neutral_refugee_users)) + "\n")
+    output.write( "Anti_Pro_users: " + str(len(Anti_Pro_users)) + "\n")
+    output.write( "Anti_Neutral_Users: " + str(len(Anti_Neutral_users)) + "\n")
+    output.write( "Pro_Neutral_users: " + str(len(Pro_Neutral_users)) + "\n")
+    output.write( "Anti_Pro_Neutral_users: " + str(len(all_intersection)) + "\n")
+    output.write( "ONLY_Anti_users: " + str(len(sure_Anti)) + "\n")
+    output.write( "ONLY_Pro_users: " + str(len(sure_Pro)) + "\n")
+    output.write( "ONLY_Neutral_users: " + str(len(sure_Neutral)) + "\n")
+    output.close()
+
+
+
+    return [sure_Anti, sure_Pro, sure_Neutral]
 
 
 def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_users, neutral_refugee_users):
@@ -89,14 +120,6 @@ def writeOutput(dictUserHashtagList, outputFile):
     output.close()
 
 
-# def writeOutputJSON(dictUserHashtagList, outputFile):
-#     output = codecs.open(outputFile, "w", "utf-8")
-#     for item in dictUserHashtagList.iteritems():
-#         output.write(json.dumps(item))
-#         output.write('\n')
-#     output.close()
-
-
 def writeOutputPlainAndJSON(dictUserHashtagList, outputFile):
     output = codecs.open(outputFile, "w", "utf-8")
     for k, v in dictUserHashtagList.iteritems():
@@ -122,22 +145,27 @@ if __name__ == '__main__':
     logger = logging.getLogger("cooccurringHashtagsByUsers.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
+    # Step 1 : TAG USERS
     logger.info('Started tagging users')
 
     tweetsAsDictionary = Tweet.getTweetAsDictionary(tweetDir)
     userSets = tagUsers(tweetsAsDictionary)
-    pos = userSets[0]
+    pro = userSets[0]
     neg = userSets[1]
     neu = userSets[2]
     screen_names = userSets[3]
 
     writeOutput(screen_names, userFile)
 
+    # Step 2 : Resolve ambiguous users
+    logger.info('Resolving ambiguous users')
+    [usersPRO, usersANTI, usersNEUTRAL] = resolveAmbiguousUsers(pro, neg, neu, tweetDir)
+
+    # Step 3 : Cooc hashtags
     logger.info('Started computing coocurring hashtags per users')
 
-    tweetsAsDict = Tweet().getTweetAsDictionary(tweetDir)
-    [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, pos,
-                                                                                                    neg, neu)
+    tweetsAsDict = Tweet.getTweetAsDictionary(tweetDir)
+    [usersWithPROHashtags, usersWithANTIHashtags, usersWithNEUTRALHashtags] = coocuringTagsPerUsers(tweetsAsDict, usersPRO, usersANTI, usersNEUTRAL)
 
     writeOutputPlainAndJSON(usersWithPROHashtags, outputPRO)
     writeOutputPlainAndJSON(usersWithANTIHashtags, outputANTI)
