@@ -1,5 +1,5 @@
 import codecs
-from pandas import json
+import json
 import sys
 from collections import defaultdict
 import operator

@@ -1,8 +1,7 @@
 #!/bin/bash
 
-CORES=27
-#INPUT_DIR=/home/muntean/english-tweets-09
-INPUT_DIR=/data/tweets
+CORES=16
+INPUT_DIR=/data/muntean/tweets
 OUTPUT_DIR=/home/muntean/output-sem-wordcount
 COMMAND="time python ../stats/computeWordCount.py"
 
