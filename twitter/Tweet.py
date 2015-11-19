@@ -57,14 +57,15 @@ class Tweet:
                     yield tweet
         else:
             try:
-                for line in gzip.open(path, 'b'):
+                for line in gzip.open(path):
                     try:
                         tweet = json.loads(line)
                     except:
                         print "Couldn't parse tweet: ", line[:200]
                     yield tweet
             except IOError as e:
-                print "I/O error({0}): {1} in file {2}".format(e.errno, e.strerror,path)
+                print "I/O error({0}): {1} in file {2}".format(e.errno, e.strerror, path)
+
 
 if __name__ == '__main__':
     #print stopwords
