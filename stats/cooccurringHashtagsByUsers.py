@@ -83,8 +83,8 @@ def resolveAmbiguousUsers(pro_refugee_users, anti_refugee_users, neutral_refugee
     output.close()
 
 
-
-    return [sure_Anti, sure_Pro, sure_Neutral]
+    #  return [sure_Anti, sure_Pro, sure_Neutral] this mixed up the files inverting anti and pro between each other
+    return [sure_Pro, sure_Anti, sure_Neutral]
 
 
 def coocuringTagsPerUsers(tweetsAsDictionary, pro_refugee_users, anti_refugee_users, neutral_refugee_users):
