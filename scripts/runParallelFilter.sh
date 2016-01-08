@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 CORES=16
 INPUT_DIR=/data/muntean/tweets
