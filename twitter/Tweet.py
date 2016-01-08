@@ -19,6 +19,16 @@ class Tweet:
         return [t for t in twokenize.tokenize(tweetText.lower()) if t not in stopwords]
 
     @staticmethod
+    def removeTabsInTweetText(tweetText):
+        return tweetText.replace("\t", " ")
+
+    @staticmethod
+    def getHashtags(tweetText):
+        # with repetitions
+        tweetTokens = Tweet.tokenizeTweetText(tweetText)
+        return [x for x in tweetTokens if x.startswith('#')]
+
+    @staticmethod
     def getTweetAsTweetTextTokens(path):
 
         if os.path.isdir(path):
@@ -69,15 +79,17 @@ if __name__ == '__main__':
     #print stopwords
 
 
-    tweetsAsTokens = Tweet.getTweetAsTweetTextTokens("../../../english-tweets")
-    for i in tweetsAsTokens:
-        print i
-        break
+    # tweetsAsTokens = Tweet.getTweetAsTweetTextTokens("../../../english-tweets")
+    # for i in tweetsAsTokens:
+    #     print i
+    #     break
 
-    j=0
-    for i in Tweet.getTweetAsDictionary("../../../english-tweets/sample/90-tweets.json.gz"):
-        j+=1
+    j = 0
+    for i in Tweet.getTweetAsDictionary("../../../english-tweets/english-tweets-20150901.json.part.gz"):
+
+        j += 1
         print j
+        print Tweet.tokenizeTweetText(i["text"])
         print i['user']['id_str']
         print i['user']['location']
 
