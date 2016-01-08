@@ -1,9 +1,10 @@
 import codecs
 import json
 import logging
+import os
 import sys
 from collections import defaultdict
-
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
 
 
