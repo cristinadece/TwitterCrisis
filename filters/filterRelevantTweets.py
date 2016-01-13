@@ -44,6 +44,7 @@ def filterRelevance(allHtList, tweet):
 # andrea
 # fields:
 def filterHashtagType(htDict, tweet):
+    # todo need to add the ID of the tweet
     tweetDict = dict()
     tweetText = tweet["text"]
     tweetTextTokens = Tweet.tokenizeTweetText(tweetText)
@@ -58,6 +59,7 @@ def filterHashtagType(htDict, tweet):
             tags.append("Neutral")
 
     tag_set = set(tags)
+    tweetDict["id_str"] = tweet["id_str"]
     tweetDict["text"] = tweetText
     tweetDict["tokenized_text"] = tweetTextTokens
     tweetDict["hashtags"] = Tweet.getHashtags(tweetText)
@@ -100,7 +102,7 @@ if __name__ == '__main__':
     outputTaggedNonRelevant = codecs.open(sys.argv[4], "w", "utf-8")
 
     htDict = loadHashtags()
-    print htDict
+    # print htDict
     tweetsAsDict = Tweet.getTweetAsDictionary(inputFile)
 
     i = 0
