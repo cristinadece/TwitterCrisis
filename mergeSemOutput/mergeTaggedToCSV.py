@@ -34,6 +34,7 @@ if __name__ == '__main__':
         print "You need to pass the following 2 params: <inputDIR> <outputFileCVS>"
         sys.exit(-1)
     inputDir = sys.argv[1]
+    os.chdir(inputDir)
     outputFile = sys.argv[2]
     output = codecs.open(outputFile, "w", "utf-8")
 
