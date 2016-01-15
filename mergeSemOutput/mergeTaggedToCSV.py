@@ -17,10 +17,10 @@ This is needed for merging the tagged tweets
 
 def formatCSVLine(jsonDict):
     id_str = jsonDict["id_str"]
-    text = jsonDict["text"].replace(",", " ")
+    text = jsonDict["text"].replace(",", " ").replace("\n"," ").replace("\t"," ")
     sensitive = jsonDict["sensitive"]
-    tag = jsonDict["tag"]
-    csv_line = ",".join([id_str, text, sensitive, tag]) + "\n"
+    tag = jsonDict["tag"].capitalize()
+    csv_line = ",".join([id_str, text, str(sensitive), tag]) + "\n"
     return csv_line
 
 
@@ -34,7 +34,6 @@ if __name__ == '__main__':
         print "You need to pass the following 2 params: <inputDIR> <outputFileCVS>"
         sys.exit(-1)
     inputDir = sys.argv[1]
-    os.chdir(inputDir)
     outputFile = sys.argv[2]
     output = codecs.open(outputFile, "w", "utf-8")
 
@@ -43,7 +42,7 @@ if __name__ == '__main__':
             if "tagged-english-tweets" in fname:
                 day = fname.split("-")[3].split(".")[0]
                 irrelevantFilename = "taggedNonRelevant-english-tweets-" + day + ".sample.output"
-                with open(fname) as textfile1, open(irrelevantFilename) as textfile2:
+                with open(inputDir+fname) as textfile1, open(inputDir+irrelevantFilename) as textfile2:
                     for x, y in izip(textfile1, textfile2):
                         line1 = json.loads(x.strip())
                         line2 = json.loads(y.strip())

@@ -1,9 +1,8 @@
 #!/bin/bash
 
-CORES=27
-#INPUT_DIR=/home/muntean/english-tweets-09
-INPUT_DIR=/data/tweets
-OUTPUT_DIR=/home/muntean/output-sem-coocc-hashtags-09
+CORES=16
+INPUT_DIR=/data/muntean/tweets
+OUTPUT_DIR=/home/muntean/output-sem-coocc-hashtags
 COMMAND="time python ../stats/cooccurringHashtags.py"
 
 for LINE in `ls $INPUT_DIR/*.gz`
