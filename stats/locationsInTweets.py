@@ -5,7 +5,7 @@ import os
 import sys
 from collections import Counter
 
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 # https://github.com/geopy/geopy
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util import worldLocations
