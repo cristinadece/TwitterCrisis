@@ -78,17 +78,19 @@ if __name__ == '__main__':
 
         if i % 1000 == 0:
             print i
-        if i % 4000 == 0:
-            break
+        # if i % 400 == 0:
+        #     break
 
     #
     output = codecs.open(outputFile, "w", "utf-8")
     orderredLocations = Counter(locationList).most_common()
     print orderredLocations
-    # for loc in orderredLocations:
-    #     lat = wl[loc[0]][3]
-    #     lon = wl[loc[0]][2]
-    #     s = str(loc[0]) + str(lon) + str(lat) + str(loc[1])
+    for loc in orderredLocations:
+        lat = wl[loc[0]][3]
+        lon = wl[loc[0]][2]
+        s = str(loc[0]) + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
+        output.write(s)
+    output.close()
 
 
     # [(u'obama', 73), (u'clinton', 55), (u'police', 46), (u'vienna', 34), (u'man', 17), (u'budapest', 15),
