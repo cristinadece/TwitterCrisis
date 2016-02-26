@@ -5,7 +5,7 @@ from collections import defaultdict
 
 stopwords = ["dalai", "buy", "best", "deal", "obama", "clinton", "police", "goes", "reading", "born", "manage", "gay",
              "barry", "dinar", "sale", "march", "nice", "mary", "vladimir", "zug", "boom", "anna", "gap", "york", "bar",
-             "salt"]
+             "salt", "wedding"]
 
 # eg New York
 

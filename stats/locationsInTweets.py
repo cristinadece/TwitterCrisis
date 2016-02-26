@@ -88,7 +88,10 @@ if __name__ == '__main__':
     for loc in orderredLocations:
         lat = wl[loc[0]][3]
         lon = wl[loc[0]][2]
-        s = str(loc[0]) + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
+        try:
+            s = str(loc[0]) + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
+        except:
+            print "error happens here: ", inputFile, loc, wl[loc]
         output.write(s)
     output.close()
 
