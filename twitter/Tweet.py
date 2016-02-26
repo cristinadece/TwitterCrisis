@@ -88,29 +88,35 @@ if __name__ == '__main__':
     for i in Tweet.getTweetAsDictionary("../../../english-tweets/english-tweets-20150901.json.part.gz"):
 
         j += 1
-        print j
-        print Tweet.tokenizeTweetText(i["text"])
-        print i['user']['id_str']
-        print i['user']['location']
 
+        if i['place']!=None:
+            print i["place"]
 
-        print i['place'] # https://dev.twitter.com/overview/api/places
-            # "name":"Washington",
-            # "place_type":"city",
+        if i['coordinates']!=None:
+            print i['coordinates']["coordinates"]
+        # print j
+        # print Tweet.tokenizeTweetText(i["text"])
+        # print i['user']['id_str']
+        # print i['user']['location']
+        #
+        #
+        # print i['place'] # https://dev.twitter.com/overview/api/places
+        #     # "name":"Washington",
+        #     # "place_type":"city",
+        #
+        #
+        # print i['coordinates']
+        # # "coordinates":
+        # #     {
+        # #         "coordinates":
+        # #         [
+        # #             -75.14310264,
+        # #             40.05701649
+        # #         ],
+        # #         "type":"Point"
+        # #     }
 
-
-        print i['coordinates']
-        # "coordinates":
-        #     {
-        #         "coordinates":
-        #         [
-        #             -75.14310264,
-        #             40.05701649
-        #         ],
-        #         "type":"Point"
-        #     }
-
-        if j % 10 == 0:
+        if j % 1000 == 0:
             break
 
 

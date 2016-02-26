@@ -20,15 +20,15 @@ http://t.co/Z7VS2tNaNn  #tcot #teaparty #pjnet #gop #tlot #ccot #p2 http://t.co/
 "#tcot", "#teaparty", "#pjnet", "#gop", "#tlot", "#ccot", "#p2", "http://t.co/\u2026"]}
 """
 
-def searchWithGeopy(query):
-    geolocator = Nominatim()
-    location = geolocator.geocode(query)
-    print location.raw
-
-    # we need title
-
-    # we need coords
-    print((location.latitude, location.longitude))
+# def searchWithGeopy(query):
+#     geolocator = Nominatim()
+#     location = geolocator.geocode(query)
+#     print location.raw
+#
+#     # we need title
+#
+#     # we need coords
+#     print((location.latitude, location.longitude))
 
 
 def getFilterredTweetsAsDict(path):
@@ -89,7 +89,7 @@ if __name__ == '__main__':
         lat = wl[loc[0]][3]
         lon = wl[loc[0]][2]
         try:
-            s = str(loc[0]) + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
+            s = loc[0] + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
         except:
             print "error happens here: ", inputFile, loc, wl[loc]
         output.write(s)
