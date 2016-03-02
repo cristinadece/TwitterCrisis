@@ -119,8 +119,7 @@ if __name__ == '__main__':
         sys.exit(-1)
     inputFile = sys.argv[1]
     outputRelevant = codecs.open(sys.argv[2], "w", "utf-8")
-    outputTagged = codecs.open(sys.argv[3], "w", "utf-8")
-    outputTaggedNonRelevant = codecs.open(sys.argv[4], "w", "utf-8")
+
 
     htDict = loadHashtags()
     # print htDict
