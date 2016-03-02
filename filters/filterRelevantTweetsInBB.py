@@ -48,7 +48,8 @@ def getLocationData(tweet):
     :param tweet:
     :return:
     """
-    tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
+    if tweet["coordinates"] is not None:
+        tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
 
     if tweet["place"]["place_type"] == "city":
         tweet_place_city = tweet["place"]["name"]  # if place type == city
