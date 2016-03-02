@@ -7,9 +7,20 @@ from collections import defaultdict
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from twitter.Tweet import Tweet
 
+'''
+This is for geotagged raw JSON tweets
+'''
+
 eurasiaBB = [tuple([-24.08203125,14.0939571778]), tuple([70.13671875,66.9988437919])]
 
 def inBB(lon, lat, boundingbox=eurasiaBB):
+    """
+    Checks if a coordinate [longitude, latitude] is within a Bounding Box
+    :param lon:
+    :param lat:
+    :param boundingbox:
+    :return:
+    """
     lonMin = boundingbox[0][0]
     lonMax = boundingbox[1][0]
     latMin = boundingbox[0][1]
