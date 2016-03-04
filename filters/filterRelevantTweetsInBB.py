@@ -11,7 +11,7 @@ from twitter.Tweet import Tweet
 This is for geotagged raw JSON tweets
 '''
 
-eurasiaBB = [tuple([-24.08203125,14.0939571778]), tuple([70.13671875,66.9988437919])]
+eurasiaBB = [tuple([-24.08203125, 14.0939571778]), tuple([70.13671875, 66.9988437919])]
 
 def inBB(lon, lat, boundingbox=eurasiaBB):
     """
