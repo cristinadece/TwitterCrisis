@@ -65,21 +65,22 @@ def filterRelevanceinBB(allHtList, tweet, wl):
     tweetTextTokens = Tweet.tokenizeTweetText(tweetText)
     # if any(r in tweetText for r in allHtList):
     user_location = userLocationInBB(tweet, wl)
-    if any(token in allHtList for token in tweetTextTokens) and user_location!=None:
-        tweetDict["id_str"] = tweet["id_str"]
-        tweetDict["text"] = tweetText
-        tweetDict["tokenized_text"] = tweetTextTokens
-        tweetDict["created_at"] = tweet["created_at"]
-        tweetDict["place"] = tweet["place"]
-        tweetDict["hashtags"] = tweet["entities"]["hashtags"]
-        tweetDict["user_id"] = tweet["user"]["id_str"]
-        tweetDict["screen_name"] = tweet["user"]["screen_name"]
-        tweetDict["user_location"] = user_location
-        if tweet["coordinates"] is not None:
-            tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
-        else:
-            tweet_coords = None
-        tweetDict["tweet_coords"] = tweet_coords
+    if any(token in allHtList for token in tweetTextTokens):
+        if user_location!=None:
+            tweetDict["id_str"] = tweet["id_str"]
+            tweetDict["text"] = tweetText
+            tweetDict["tokenized_text"] = tweetTextTokens
+            tweetDict["created_at"] = tweet["created_at"]
+            tweetDict["place"] = tweet["place"]
+            tweetDict["hashtags"] = tweet["entities"]["hashtags"]
+            tweetDict["user_id"] = tweet["user"]["id_str"]
+            tweetDict["screen_name"] = tweet["user"]["screen_name"]
+            tweetDict["user_location"] = user_location
+            if tweet["coordinates"] is not None:
+                tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
+            else:
+                tweet_coords = None
+            tweetDict["tweet_coords"] = tweet_coords
     return tweetDict
 
 
