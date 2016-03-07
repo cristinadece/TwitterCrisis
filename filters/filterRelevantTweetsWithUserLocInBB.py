@@ -6,7 +6,7 @@ import sys
 from collections import defaultdict
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tokenizer import twokenize
-from twitter import Tweet
+from twitter.Tweet import Tweet
 from util import worldLocations
 
 '''
