@@ -27,7 +27,7 @@ def userLocationInBB(tweet, wl):
         potential_cities = [t.capitalize() for t in twokenize.tokenize(user_loc)]
         for city in potential_cities:
             if city in wl.keys():
-                return city
+                return city, wl[city]
             else:
                 return None
 
