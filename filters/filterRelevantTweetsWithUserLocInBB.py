@@ -21,15 +21,12 @@ def userLocationInBB(tweet, wl):
     :return:
     """
     user_loc = tweet['user']['location']
-    if user_loc==None:
-        return None
-    else:
+    if user_loc!=None:
         potential_cities = [t.capitalize() for t in twokenize.tokenize(user_loc)]
         for city in potential_cities:
             if city in wl.keys():
-                return city, wl[city]
-            else:
-                return None
+                return city
+    return None
 
 
 def loadHashtags():
@@ -76,6 +73,7 @@ def filterRelevanceinBB(allHtList, tweet, wl):
             tweetDict["user_id"] = tweet["user"]["id_str"]
             tweetDict["screen_name"] = tweet["user"]["screen_name"]
             tweetDict["user_location"] = user_location
+            tweetDict["user_loc_data"] = wl[user_location]
             if tweet["coordinates"] is not None:
                 tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
             else:
