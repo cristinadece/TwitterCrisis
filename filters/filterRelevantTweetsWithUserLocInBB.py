@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     i = 0
     for tweet in tweetsAsDict:
-        relevantTweetDict = filterRelevanceinBB(htDict["All"], tweet)
+        relevantTweetDict = filterRelevanceinBB(htDict["All"], tweet, wl)
         if bool(relevantTweetDict):  # the dict is not empty
             dumpDictValuesToFile(relevantTweetDict, outputRelevant)
 
