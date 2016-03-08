@@ -69,7 +69,7 @@ def window(seq, n=2):
 def window_no_twitter_elems(seq, n=2):
     it = iter(seq)
     result = tuple(islice(it, n))
-    if (len(result) == n) and ( not contains_non_words(result)):
+    if (len(result) == n) and (not contains_non_words(result)):
         yield u' '.join(result)
     for elem in it:
         result = result[1:] + (elem,)

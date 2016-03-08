@@ -108,6 +108,37 @@ def filterRelevanceinBB(allHtList, tweet):
     return tweetDict
 
 
+# mauro
+# lowercase, tokenization from util - keep everything coherent
+# fields: user_id, screen_name, text, data, id tweet, entities: dict{coord, location, user, hashtags}
+def filterRelevanceNoBB(allHtList, tweet):
+    tweetDict = dict()
+    tweetText = tweet["text"]
+    tweetTextTokens = Tweet.tokenizeTweetText(tweetText)
+    # if any(r in tweetText for r in allHtList):
+    if any(token in allHtList for token in tweetTextTokens):
+        tweetDict["id_str"] = tweet["id_str"]
+        tweetDict["text"] = tweetText
+        tweetDict["tokenized_text"] = tweetTextTokens
+        tweetDict["hashtags"] = tweet["entities"]["hashtags"]
+
+        tweetDict["created_at"] = tweet["created_at"]
+
+        tweetDict["user_id"] = tweet["user"]["id_str"]
+        tweetDict["screen_name"] = tweet["user"]["screen_name"]
+
+        tweet_coords, tweet_place_city, tweet_place_country, tweet_place_country_code, user_location = getLocationData(tweet)
+        tweetDict["user_location"] = user_location
+
+        tweetDict["place"] = tweet["place"]
+        tweetDict["tweet_coords"] = tweet_coords
+        tweetDict["tweet_place_city"] = tweet_place_city
+        tweetDict["tweet_place_country"] = tweet_place_country
+        tweetDict["tweet_place_country_code"] = tweet_place_country_code
+
+    return tweetDict
+
+
 def dumpDictValuesToFile(dict, file):
     line = json.dumps(dict) + "\n"
     file.write(line)
@@ -130,10 +161,8 @@ if __name__ == '__main__':
 
     i = 0
     for tweet in tweetsAsDict:
-        relevantTweetDict = filterRelevanceinBB(htDict["All"], tweet)
+        relevantTweetDict = filterRelevanceNoBB(htDict["All"], tweet)
         if bool(relevantTweetDict):  # the dict is not empty
             dumpDictValuesToFile(relevantTweetDict, outputRelevant)
-
-
     outputRelevant.close()
 

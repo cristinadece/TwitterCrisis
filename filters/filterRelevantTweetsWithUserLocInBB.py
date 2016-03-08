@@ -21,12 +21,14 @@ def userLocationInBB(tweet, wl):
     :return:
     """
     user_loc = tweet['user']['location']
-    if user_loc is not None:
+    if user_loc != "":
+        print "user loc: ", user_loc
         potential_cities = [t.capitalize() for t in twokenize.tokenize(user_loc)]
+        print potential_cities
         for city in potential_cities:
             if city in wl.keys():
-                return city
-        print repr(user_loc)
+                return "city: ", city
+
     return None
 
 
