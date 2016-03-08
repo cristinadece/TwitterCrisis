@@ -26,7 +26,7 @@ def userLocationInBB(tweet, wl):
         for city in potential_cities:
             if city in wl.keys():
                 return city
-        print user_loc
+        print repr(user_loc)
     return None
 
 
