@@ -7,7 +7,7 @@ from collections import defaultdict
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tokenizer import twokenize
 from twitter.Tweet import Tweet
-from util import worldLocations
+from util import locations
 
 '''
 This is for geotagged raw JSON tweets
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     inputFile = sys.argv[1]
     outputRelevant = codecs.open(sys.argv[2], "w", "utf-8")
 
-    wl = worldLocations.Locations.loadFromFile()
+    wl = locations.Cities.loadFromFile()
     print "Loaded city dict", len(wl)
 
     htDict = loadHashtags()

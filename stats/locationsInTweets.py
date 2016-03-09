@@ -8,16 +8,17 @@ from collections import Counter
 # from geopy.geocoders import Nominatim
 # https://github.com/geopy/geopy
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from util import worldLocations
+from util import locations
 
 """
-{"user_id": "26900055", "screen_name": "DrMartyFox", "text": "RT @petefrt: Scientists Blast Obamas Global Warming Claims
-http://t.co/Z7VS2tNaNn  #tcot #teaparty #pjnet #gop #tlot #ccot #p2 http://t.co/\u2026", "created_at": "Tue Aug 04 23:59:28 +0000 2015",
-"hashtags": [{"indices": [83, 88], "text": "tcot"}, {"indices": [89, 98], "text": "teaparty"}, {"indices": [99, 105], "text": "pjnet"},
-{"indices": [106, 110], "text": "gop"}, {"indices": [111, 116], "text": "tlot"}, {"indices": [117, 122], "text": "ccot"},
-{"indices": [123, 126], "text": "p2"}], "place": null, "id_str": "628716917310771201",
-"tokenized_text": ["@petefrt", "scientists", "blast", "obamas", "global", "warming", "claims", "http://t.co/z7vs2tnann",
-"#tcot", "#teaparty", "#pjnet", "#gop", "#tlot", "#ccot", "#p2", "http://t.co/\u2026"]}
+{"tweet_place_country": null, "user_id": "62815642", "screen_name": "TrucksHorsesDog", "tweet_place_city": null,
+"tweet_place_country_code": null, "text": "RT @LeahR77: #PlannedInfanticide &amp; The Mammogram MYTH
+\ud83d\udc4c\n#DefundPP #PPSellsDeadBabies #PJNET #TCOT http://t.co/m90wG0zpwn", "created_at": "Tue Aug 04 23:59:51 +0000 2015",
+"hashtags": [{"indices": [13, 32], "text": "PlannedInfanticide"}, {"indices": [60, 69], "text": "DefundPP"}, {"indices": [70, 88],
+"text": "PPSellsDeadBabies"}, {"indices": [89, 95], "text": "PJNET"}, {"indices": [96, 101], "text": "TCOT"}],
+"user_location": "A R I Z O N A", "place": null, "id_str": "628717013452468224", "tokenized_text": ["@leahr77",
+"#plannedinfanticide", "mammogram", "myth", "\ud83d\udc4c", "#defundpp", "#ppsellsdeadbabies", "#pjnet", "#tcot",
+"http://t.co/m90wg0zpwn"], "tweet_coords": null}
 """
 
 # def searchWithGeopy(query):
@@ -51,7 +52,7 @@ def getFilterredTweetsAsDict(path):
 
 
 if __name__ == '__main__':
-    logger = logging.getLogger("worldLocations.py")
+    logger = logging.getLogger("locations.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
     if len(sys.argv) != 3:
@@ -62,7 +63,7 @@ if __name__ == '__main__':
 
     # searchWithGeopy("Paris")
 
-    wl = worldLocations.Locations.loadFromFile()
+    wl = locations.Cities.loadFromFile()
     print "Loaded city dict", len(wl)
 
     i = 0
