@@ -22,9 +22,9 @@ def userLocationInBB(tweet, wl):
     """
     user_loc = tweet['user']['location']
     if user_loc != "":
-        print "user loc: ", user_loc
+        #print "user loc: ", user_loc
         potential_cities = [t.capitalize() for t in twokenize.tokenize(user_loc)]
-        print potential_cities
+        #print potential_cities
         for city in potential_cities:
             if city in wl.keys():
                 return "city: ", city
@@ -66,22 +66,26 @@ def filterRelevanceinBB(allHtList, tweet, wl):
     # if any(r in tweetText for r in allHtList):
     user_location = userLocationInBB(tweet, wl)
     if any(token in allHtList for token in tweetTextTokens):
-        if user_location is not None:
-            tweetDict["id_str"] = tweet["id_str"]
-            tweetDict["text"] = tweetText
-            tweetDict["tokenized_text"] = tweetTextTokens
-            tweetDict["created_at"] = tweet["created_at"]
-            tweetDict["place"] = tweet["place"]
-            tweetDict["hashtags"] = tweet["entities"]["hashtags"]
-            tweetDict["user_id"] = tweet["user"]["id_str"]
-            tweetDict["screen_name"] = tweet["user"]["screen_name"]
-            tweetDict["user_location"] = user_location
-            tweetDict["user_loc_data"] = wl[user_location]
-            if tweet["coordinates"] is not None:
-                tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
-            else:
-                tweet_coords = None
-            tweetDict["tweet_coords"] = tweet_coords
+      #  if user_location is not None:
+        tweetDict["id_str"] = tweet["id_str"]
+        tweetDict["text"] = tweetText
+        tweetDict["tokenized_text"] = tweetTextTokens
+        tweetDict["created_at"] = tweet["created_at"]
+        tweetDict["place"] = tweet["place"]
+        tweetDict["hashtags"] = tweet["entities"]["hashtags"]
+        tweetDict["user_id"] = tweet["user"]["id_str"]
+        tweetDict["screen_name"] = tweet["user"]["screen_name"]
+        tweetDict["user_location"] = user_location
+        #tweetDict["user_loc_data"] = wl[user_location]
+        if tweet["coordinates"] is not None:
+            tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
+        else:
+            tweet_coords = None
+        tweetDict["tweet_coords"] = tweet_coords
+
+        print tweet_coords, tweet["place"]
+
+
     return tweetDict
 
 

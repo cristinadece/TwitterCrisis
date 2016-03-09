@@ -39,7 +39,19 @@ class Locations:
             timezone = locationData[17]
             if name not in stopwords:
                 worldLocations[name.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, timezone])
+        print len(worldLocations)
         return worldLocations
+
+
+    @staticmethod
+    def filterEuropeanCities(worldLocations):
+        citiesEurope = defaultdict()
+        for city, cityTuple in worldLocations.iteritems():
+            if "Europe" in cityTuple[5]:
+                citiesEurope[city] = cityTuple
+        print len(citiesEurope)
+        return citiesEurope
+
 
     @staticmethod
     def filterLocationsInBB(filename="../resources/cities15000.txt"):
@@ -58,14 +70,15 @@ if __name__ == '__main__':
     logger = logging.getLogger("worldLocations.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
-    if len(sys.argv) != 2:
-        print "You need to pass the following 2 params: <inputFile> ; cities1000.txt"
-        sys.exit(-1)
-    inputFile = sys.argv[1]
+    # if len(sys.argv) != 2:
+    #     print "You need to pass the following 2 params: <inputFile> ; cities1000.txt"
+    #     sys.exit(-1)
+    # inputFile = sys.argv[1]
 
     Locations.filterLocationsInBB()
 
-    # wl = Locations.loadFromFile()
-    # print len(wl)
+    wl = Locations.loadFromFile()  #todo how should i index the cities, maybe also ascii
+    citiesEU = Locations.filterEuropeanCities(wl)
+    print citiesEU.keys()[:100]
 
 

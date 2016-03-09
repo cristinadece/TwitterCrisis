@@ -135,11 +135,13 @@ def filterRelevanceNoBB(allHtList, tweet):
         tweet_coords, tweet_place_city, tweet_place_country, tweet_place_country_code, user_location = getLocationData(tweet)
         tweetDict["user_location"] = user_location
 
+
         tweetDict["place"] = tweet["place"]
         tweetDict["tweet_coords"] = tweet_coords
         tweetDict["tweet_place_city"] = tweet_place_city
         tweetDict["tweet_place_country"] = tweet_place_country
         tweetDict["tweet_place_country_code"] = tweet_place_country_code
+
 
     return tweetDict
 
