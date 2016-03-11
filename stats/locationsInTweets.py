@@ -4,7 +4,6 @@ import logging
 import os
 import sys
 from collections import Counter
-
 # from geopy.geocoders import Nominatim
 # https://github.com/geopy/geopy
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -21,6 +20,7 @@ from util import locations
 "http://t.co/m90wg0zpwn"], "tweet_coords": null}
 """
 
+# Usage: searchWithGeopy("Paris")
 # def searchWithGeopy(query):
 #     geolocator = Nominatim()
 #     location = geolocator.geocode(query)
@@ -51,8 +51,63 @@ def getFilterredTweetsAsDict(path):
             yield tweet
 
 
+def getLocationFromTweetText(tweet, cityDict, countryDict):
+    cityList = list()
+    countryList = list()
+    for token in tweet["tokenized_text"]:  # todo: bigrams, trigrams, check if hashtag is a place by removing hash
+            if token.lower() in cityDict.keys():  # The dict has keys in lowercase
+                cityList.append(token.lower())
+            if token.lower() in countryDict.keys():
+                countryList.append(token.lower())
+    return cityList, countryList  # these need to be added to a bigger list for all tweets
+
+
+def countLocationsInTweetText(locationList, locationDict):  #todo this nees to be fixed for countries
+    # output = codecs.open(outputFile, "w", "utf-8")
+    orderredLocations = Counter(locationList).most_common()
+    for loc in orderredLocations:
+        lat = locationDict[loc[0]][3]
+        lon = locationDict[loc[0]][2]
+        try:
+            s = loc[0] + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
+        except:
+            print "error happens here: ", inputFile, loc, locationDict[loc]
+    #     output.write(s)
+    # output.close()
+
+
+def getUserLocation(tweet):
+    """
+    THis field is an empty string
+    :param tweet:
+    :return:
+    """
+    if tweet["user_location"]:
+        print tweet["user_location"]
+        # tokenize by , / " " unigrams, bigrams, trigrams to lower!
+    else:
+        print "the field is empty"
+
+def getPlace(tweet):
+    """
+    The idea here is that if a tweet has a place it has a country and maybe even a city - in the json schema
+    :param tweet:
+    :return: null or the object(dict)
+    """
+    return tweet["place"]
+
+
+def getCoords(tweet):
+    """
+    Returns the coords of the tweet. We should check if they are in the europe BB
+    :param tweet:
+    :return:
+    """
+    return tweet["tweet_coords"]
+
+
 if __name__ == '__main__':
-    logger = logging.getLogger("locations.py")
+    logger = logging.getLogger("locationsInTweets.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
     if len(sys.argv) != 3:
@@ -61,60 +116,29 @@ if __name__ == '__main__':
     inputFile = sys.argv[1]
     outputFile = sys.argv[2]
 
-    # searchWithGeopy("Paris")
+    # load cities and countries
+    countries = locations.Countries.loadFromFile()
+    euroCountries = locations.Countries.filterEuropeanCountries(countries)
 
-    wl = locations.Cities.loadFromFile()
-    print "Loaded city dict", len(wl)
+    cities = locations.Cities.loadFromFile()
+    euroCities = locations.Cities.filterEuropeanCities(cities)
+
+    citiesAscii = locations.Cities.loadFromFile(ascii=True)
+    euroCitiesAscii = locations.Cities.filterEuropeanCities(citiesAscii)
+
 
     i = 0
-    locationList = list()
+
     filterredTweets = getFilterredTweetsAsDict(inputFile)
     for tweet in filterredTweets:
         i += 1
-        # print tweet["tokenized_text"]
-        # todo check is hashtag is a place by removing hash
-        for token in tweet["tokenized_text"]:
-            if token in wl.keys():
-                locationList.append(token.lower())
+        print tweet
+        getUserLocation(tweet)
 
-        if i % 1000 == 0:
-            print i
-        # if i % 400 == 0:
-        #     break
-
-    #
-    output = codecs.open(outputFile, "w", "utf-8")
-    orderredLocations = Counter(locationList).most_common()
-    print orderredLocations
-    for loc in orderredLocations:
-        lat = wl[loc[0]][3]
-        lon = wl[loc[0]][2]
-        try:
-            s = loc[0] + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
-        except:
-            print "error happens here: ", inputFile, loc, wl[loc]
-        output.write(s)
-    output.close()
+        if i % 10 == 0:
+            break
 
 
-    # [(u'obama', 73), (u'clinton', 55), (u'police', 46), (u'vienna', 34), (u'man', 17), (u'budapest', 15),
-    # (u'reading', 13), (u'harper', 13), (u'munich', 12), (u'liberal', 11), (u'dallas', 10), (u'goes', 8),
-    # (u'dortmund', 8), (u'gay', 8), (u'moscow', 8), (u'liberty', 7), (u'university', 6), (u'born', 6),
-    # (u'sale', 6), (u'london', 5), (u'young', 5), (u'teresa', 4), (u'sydney', 4), (u'march', 4), (u'stockholm', 4),
-    # (u'david', 4), (u'carson', 4), (u'aleppo', 4), (u'franklin', 3), (u'paradise', 3), (u'davis', 3), (u'calais', 3),
-    # (u'pearl', 3), (u'toronto', 3), (u'imperial', 3), (u'mexico', 3), (u'jefferson', 3), (u'hammond', 3), (u'hassan', 3),
-    # (u'ron', 2), (u'mosul', 2), (u'damascus', 2), (u'virginia', 2), (u'lala', 2), (u'nice', 2), (u'madrid', 2),
-    # (u'fatwa', 2), (u'mecca', 2), (u'savage', 2), (u'central', 2), (u'melbourne', 2), (u'zug', 2), (u'colorado', 2),
-    # (u'bell', 2), (u'washington', 2), (u'spring', 2), (u'mary', 2), (u'benghazi', 2), (u'gaza', 2), (u'gallup', 2),
-    # (u'delta', 2), (u'vladimir', 2), (u'male', 2), (u'vancouver', 2), (u'walker', 2), (u'date', 2), (u'latakia', 2),
-    # (u'dinar', 2), (u'green', 2), (u'fresno', 1), (u'lansing', 1), (u'liberia', 1), (u'bar', 1), (u'asia', 1),
-    # (u'martin', 1), (u'marion', 1), (u'belgrade', 1), (u'lebanon', 1), (u'birmingham', 1), (u'brits', 1),
-    # (u'portland', 1), (u'chicago', 1), (u'federal', 1), (u'newark', 1), (u'surprise', 1), (u'venezuela', 1), (u'anna', 1),
-    # (u'wa', 1), (u'nashville', 1), (u'dome', 1), (u'saalfeld', 1), (u'york', 1), (u'malm\xf6', 1), (u'hobart', 1),
-    # (u'metro', 1), (u'langley', 1), (u'barry', 1), (u'kendall', 1), (u'hyderabad', 1), (u'evans', 1), (u'manage', 1),
-    # (u'pop', 1), (u'hebron', 1), (u'gary', 1), (u'oakland', 1), (u'george', 1), (u'ontario', 1), (u'union', 1),
-    # (u'gap', 1), (u'tehran', 1), (u'walnut', 1), (u'tampa', 1), (u'tokyo', 1), (u'levin', 1), (u'crystal', 1), (u'plymouth', 1),
-    # (u'patos', 1), (u'galt', 1), (u'boston', 1), (u'smyrna', 1), (u'barcelona', 1), (u'geneva', 1), (u'boom', 1),
-    # (u'puri', 1), (u'canterbury', 1), (u'elizabeth', 1), (u'victoria', 1), (u'opportunity', 1), (u'humble', 1),
-    # (u'kyle', 1), (u'rome', 1), (u'salt', 1), (u'ho', 1)]
+
+
 

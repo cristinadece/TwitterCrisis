@@ -11,8 +11,10 @@ stopwords = ["dalai", "buy", "best", "deal", "obama", "clinton", "police", "goes
 # [[[-24.08203125,14.0939571778],[-24.08203125,66.9988437919],[70.13671875,66.9988437919],[70.13671875,14.0939571778],
 # [-24.08203125,14.0939571778]]]
 # -24.08203125,14.0939571778,70.13671875,66.9988437919
+# Europe Bounding Box:	-31.2660(v), 27.6363(e), 39.8693(s), 81.0088
 
-eurasiaBB = [tuple([-24.08203125,14.0939571778]), tuple([70.13671875,66.9988437919])]
+eurasiaBB = [tuple([-24.08203125, 14.0939571778]), tuple([70.13671875, 66.9988437919])]
+europeBB = [tuple([-24.08203125, 14.0939571778]), tuple([70.13671875, 66.9988437919])]
 
 def inBB(lon, lat, boundingbox=eurasiaBB):
     lonMin = boundingbox[0][0]
@@ -23,15 +25,18 @@ def inBB(lon, lat, boundingbox=eurasiaBB):
 
 class Cities:
 
+    def __init__(self):
+        pass
+
     @staticmethod
     def loadFromFile(filename="../resources/cities15000inBB.txt", ascii=False):
         """
         This method load a dictionary of cities where the key is either the name or the asciiname
         :param filename:
-        :param ascii: Trues if we want the dictionary to have the asciinames as key, False otherwise
+        :param ascii: True if we want the dictionary to have the asciinames as key, False otherwise
         :return:
         """
-        worldLocations = defaultdict()
+        citiesDict = defaultdict()
         for line in codecs.open(filename, "r", "utf-8"):
             locationData = line.split("\t")
             name = locationData[1].lower()
@@ -42,19 +47,20 @@ class Cities:
             timezone = locationData[17]
             if name not in stopwords:
                 if ascii:
-                    worldLocations[asciiname.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, timezone])
+                    citiesDict[asciiname.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, timezone])
                 else:
-                    worldLocations[name.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, timezone])
-        return worldLocations
+                    citiesDict[name.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, timezone])
+        print "All cities: ", len(citiesDict)
+        return citiesDict
 
 
     @staticmethod
-    def filterEuropeanCities(worldLocations):
+    def filterEuropeanCities(citiesDict):
         citiesEurope = defaultdict()
-        for city, cityTuple in worldLocations.iteritems():
+        for city, cityTuple in citiesDict.iteritems():
             if "Europe" in cityTuple[5]:
                 citiesEurope[city] = cityTuple
-        print len(citiesEurope)
+        print "European cities: ", len(citiesEurope)
         return citiesEurope
 
 
@@ -73,6 +79,9 @@ class Cities:
 
 class Countries:
 
+    def __init__(self):
+        pass
+
     @staticmethod
     def loadFromFile(filename="../resources/countryInfo.txt"):
         """
@@ -90,11 +99,26 @@ class Countries:
                 capital = countryData[5]
                 population = countryData[7]
                 continent = countryData[8]
-                if (name not in stopwords) and (continent == "EU"):
-                    print name, continent
+                if (name not in stopwords):
                     countriesDict[name.lower()] = tuple([name, capital, population, continent])
-        print len(countriesDict)
+        print "All countries: ", len(countriesDict)
         return countriesDict
+
+
+    @staticmethod
+    def filterEuropeanCountries(countriesDict, cities = None):
+        """
+
+        :param worldLocations:
+        :return:
+        """
+        countriesEurope = defaultdict()
+        for country, countryTuple in countriesDict.iteritems():
+            if countryTuple[3] == "EU":
+                countriesEurope[country] = countryTuple
+        print "European countries: ", len(countriesEurope)
+        return countriesEurope
+
 
     @staticmethod
     def filterCountriesInBB(filename="../resources/cities15000.txt"):
@@ -114,7 +138,7 @@ if __name__ == '__main__':
 
     Cities.filterCitiesInBB()
 
-    cities = Cities.loadFromFile()  #todo how should i index the cities, maybe also ascii
+    cities = Cities.loadFromFile()
     citiesEU = Cities.filterEuropeanCities(cities)
     print citiesEU.keys()[:100]
 
