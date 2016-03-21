@@ -3,13 +3,24 @@ import json
 import logging
 import os
 import sys
-from collections import Counter
+from collections import defaultdict, Counter
 # from geopy.geocoders import Nominatim
 # https://github.com/geopy/geopy
+
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from util import locations
+from util import ngrams
+from tokenizer import twokenize
+
 
 """
+Need to see: how many have:
+    - geotagging
+    - coordinates
+    - user location
+
+
 {"tweet_place_country": null, "user_id": "62815642", "screen_name": "TrucksHorsesDog", "tweet_place_city": null,
 "tweet_place_country_code": null, "text": "RT @LeahR77: #PlannedInfanticide &amp; The Mammogram MYTH
 \ud83d\udc4c\n#DefundPP #PPSellsDeadBabies #PJNET #TCOT http://t.co/m90wG0zpwn", "created_at": "Tue Aug 04 23:59:51 +0000 2015",
@@ -62,31 +73,115 @@ def getLocationFromTweetText(tweet, cityDict, countryDict):
     return cityList, countryList  # these need to be added to a bigger list for all tweets
 
 
-def countLocationsInTweetText(locationList, locationDict):  #todo this nees to be fixed for countries
-    # output = codecs.open(outputFile, "w", "utf-8")
-    orderredLocations = Counter(locationList).most_common()
-    for loc in orderredLocations:
-        lat = locationDict[loc[0]][3]
-        lon = locationDict[loc[0]][2]
-        try:
-            s = loc[0] + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
-        except:
-            print "error happens here: ", inputFile, loc, locationDict[loc]
-    #     output.write(s)
-    # output.close()
+# def countLocationsInTweetText(locationList, locationDict, country=False):
+#     """
+#
+#     :param locationList:
+#     :param locationDict:
+#     :param country:
+#     :return:
+#     """
+#     # output = codecs.open(outputFile, "w", "utf-8")
+#     orderredLocations = Counter(locationList).most_common()
+#     for loc in orderredLocations:
+#         lat = locationDict[loc[0]][3]
+#         lon = locationDict[loc[0]][2]
+#         try:
+#             s = loc[0] + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
+#         except:
+#             print "error happens here: ", inputFile, loc, locationDict[loc]
+#     #     output.write(s)
+#     # output.close()
+
+def getLocationsFromToken(token, cityDict, countryDict):
+    city = ""
+    country = ""
+    if cityDict[token]:
+        city = token
+    if countryDict[token]:
+        country = token
+    return city, country
 
 
-def getUserLocation(tweet):
+def getUserLocation(tweet, cityDict, countryDict, outputFile):
     """
     THis field is an empty string
     :param tweet:
     :return:
     """
-    if tweet["user_location"]:
-        print tweet["user_location"]
-        # tokenize by , / " " unigrams, bigrams, trigrams to lower!
+
+    potentialCities = list()
+    potentialCountries = list()
+
+    outputFile.write("=========================\n")
+
+    locationField = tweet["user_location"].lower()
+    outputFile.write(locationField + "\n")
+
+    # 1. check if user loc is word or country - unigrams - to lower
+    city, country = getLocationsFromToken(locationField, cityDict, countryDict)
+    if city or country:
+        outputFile.write("1 " + city + "|" + country + "\n")
+        potentialCities.append(city)
+        potentialCountries.append(countries)
+        return potentialCities, potentialCountries
+    # 2. split by ,
+    elif "," in locationField:
+        locArray = locationField.split(",")
+        for token in locArray:
+            city, country = getLocationsFromToken(token, cityDict, countryDict)
+            if city or country:
+                outputFile.write("2 " + city + "|" + country + "\n")
+                potentialCities.append(city)
+                potentialCountries.append(countries)
+        return potentialCities, potentialCountries
+    # 3. split by /
+    elif "/" in locationField:
+        locArray = locationField.split(",")
+        for token in locArray:
+            city, country = getLocationsFromToken(token, cityDict, countryDict)
+            if city or country:
+                outputFile.write("3 " + city + "|" + country + "\n")
+                potentialCities.append(city)
+                potentialCountries.append(countries)
+        return potentialCities, potentialCountries
+
+    # 4. split by " "
+    # if " " in locationField:
+    #     locArray = locationField.split(",")
+    #     for token in locArray:
+    #         city, country = getLocationsFromToken(token, cityDict, countryDict)
+    #         outputFile.write("4 " + city + "|" + country + "\n")
+
+    # 5. tokenize with util and get bigram and trigrams - to lower
+    # bi
     else:
-        print "the field is empty"
+        tokenList = twokenize.tokenize(locationField.lower())
+        tokens = ngrams.window_no_twitter_elems(tokenList,2)
+        for token in tokens:
+            city, country = getLocationsFromToken(token, cityDict, countryDict)
+            if city or country:
+                outputFile.write("5a " + city + "|" + country + "\n")
+                potentialCities.append(city)
+                potentialCountries.append(countries)
+
+        tokens = ngrams.window_no_twitter_elems(tokenList,3)
+        for token in tokens:
+            city, country = getLocationsFromToken(token, cityDict, countryDict)
+        if city or country:
+            outputFile.write("5b " + city + "|" + country + "\n")
+            potentialCities.append(city)
+            potentialCountries.append(countries)
+        return potentialCities, potentialCountries
+
+    c = set(potentialCities)
+    if "" in c:
+        c.remove("")
+    C = set(potentialCountries)
+    if "" in C:
+        C.remove("")
+    return c, C
+
 
 def getPlace(tweet):
     """
@@ -119,26 +214,50 @@ if __name__ == '__main__':
     # load cities and countries
     countries = locations.Countries.loadFromFile()
     euroCountries = locations.Countries.filterEuropeanCountries(countries)
+    # countries = defaultdict(tuple)
+    # euroCountries = defaultdict(tuple)
 
     cities = locations.Cities.loadFromFile()
     euroCities = locations.Cities.filterEuropeanCities(cities)
+    print euroCities["washington"]
+    print cities["raqqa"]
+    print euroCountries["turkey"], countries["turkey"]  # only in countries!
 
     citiesAscii = locations.Cities.loadFromFile(ascii=True)
     euroCitiesAscii = locations.Cities.filterEuropeanCities(citiesAscii)
 
 
-    i = 0
+    tweetId = 0
+    placeTweets = list()
+    geotaggedTweets = list()
+    userLocationTweets = list()
+
+    outputFile = codecs.open("userLocationParsing.txt", "w", encoding="utf-8")
 
     filterredTweets = getFilterredTweetsAsDict(inputFile)
     for tweet in filterredTweets:
-        i += 1
-        print tweet
-        getUserLocation(tweet)
+        tweetId += 1
+        if getPlace(tweet) is not None:
+            placeTweets.append(tweetId)
+        if getCoords(tweet) is not None:
+            geotaggedTweets.append(tweetId)
+        if tweet["user_location"]:
+            userLocationTweets.append(tweetId)
+            potentialCities, potentialCountries = getUserLocation(tweet, euroCities, euroCountries, outputFile)
 
-        if i % 10 == 0:
-            break
 
+        # if tweetId % 100 == 0:
+        #     break
+    outputFile.close()
 
+    print "Tweets with place", len(placeTweets) #, placeTweets
+    print "Tweets with GEO", len(geotaggedTweets) #, geotaggedTweets
+    print "Tweets with user location", len(userLocationTweets) #, userLocationTweets
 
+    # intersections - it could happen then same tweet has place, geo and user location
+    # for tweets with place or geo - the user location become last resource
+    print "Tweets with place and geo", len(set(placeTweets).intersection(set(geotaggedTweets)))
+    print "Tweets with place and user loc", len(set(placeTweets).intersection(set(userLocationTweets)))
+    print "Tweets with geo and user loc", len(set(geotaggedTweets).intersection(set(userLocationTweets)))
 
 

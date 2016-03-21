@@ -7,6 +7,8 @@ stopwords = ["dalai", "buy", "best", "deal", "obama", "clinton", "police", "goes
              "barry", "dinar", "sale", "march", "nice", "mary", "vladimir", "zug", "boom", "anna", "gap", "york", "bar",
              "salt", "wedding"]
 
+stopwordsEuro = ["washington", "perth"]
+
 # eg New York
 # [[[-24.08203125,14.0939571778],[-24.08203125,66.9988437919],[70.13671875,66.9988437919],[70.13671875,14.0939571778],
 # [-24.08203125,14.0939571778]]]
@@ -36,7 +38,7 @@ class Cities:
         :param ascii: True if we want the dictionary to have the asciinames as key, False otherwise
         :return:
         """
-        citiesDict = defaultdict()
+        citiesDict = defaultdict(tuple)
         for line in codecs.open(filename, "r", "utf-8"):
             locationData = line.split("\t")
             name = locationData[1].lower()
@@ -56,9 +58,9 @@ class Cities:
 
     @staticmethod
     def filterEuropeanCities(citiesDict):
-        citiesEurope = defaultdict()
+        citiesEurope = defaultdict(tuple)
         for city, cityTuple in citiesDict.iteritems():
-            if "Europe" in cityTuple[5]:
+            if ("Europe" in cityTuple[5]) and (city not in stopwordsEuro):
                 citiesEurope[city] = cityTuple
         print "European cities: ", len(citiesEurope)
         return citiesEurope
@@ -90,7 +92,7 @@ class Countries:
         :param filename:
         :return:
         """
-        countriesDict = defaultdict()
+        countriesDict = defaultdict(tuple)
         print filename
         for line in codecs.open(filename, "r", "utf-8"):
             if not line.startswith("#") and line != "\n":
@@ -112,7 +114,7 @@ class Countries:
         :param worldLocations:
         :return:
         """
-        countriesEurope = defaultdict()
+        countriesEurope = defaultdict(tuple)
         for country, countryTuple in countriesDict.iteritems():
             if countryTuple[3] == "EU":
                 countriesEurope[country] = countryTuple
