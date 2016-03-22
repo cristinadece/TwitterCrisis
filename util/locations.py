@@ -5,7 +5,7 @@ from collections import defaultdict
 
 stopwords = ["dalai", "buy", "best", "deal", "obama", "clinton", "police", "goes", "reading", "born", "manage", "gay",
              "barry", "dinar", "sale", "march", "nice", "mary", "vladimir", "zug", "boom", "anna", "gap", "york", "bar",
-             "salt", "wedding"]
+             "salt", "wedding", "of", "boston"]
 
 stopwordsEuro = ["washington", "perth"]
 
@@ -46,12 +46,13 @@ class Cities:
             latitude = float(locationData[4])
             longitude = float(locationData[5])
             countrycode = locationData[8]
+            population = int(locationData[14])
             timezone = locationData[17]
-            if name not in stopwords:
+            if (name not in stopwords) and (population > 50000):
                 if ascii:
-                    citiesDict[asciiname.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, timezone])
+                    citiesDict[asciiname.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, population, timezone])
                 else:
-                    citiesDict[name.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, timezone])
+                    citiesDict[name.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, population, timezone])
         print "All cities: ", len(citiesDict)
         return citiesDict
 
@@ -60,14 +61,14 @@ class Cities:
     def filterEuropeanCities(citiesDict):
         citiesEurope = defaultdict(tuple)
         for city, cityTuple in citiesDict.iteritems():
-            if ("Europe" in cityTuple[5]) and (city not in stopwordsEuro):
+            if ("Europe" in cityTuple[6]) and (city not in stopwordsEuro):
                 citiesEurope[city] = cityTuple
         print "European cities: ", len(citiesEurope)
         return citiesEurope
 
 
     @staticmethod
-    def filterCitiesInBB(filename="../resources/cities15000.txt"):
+    def filterCitiesInBB(filename="../resources/cities15000inBBFilter.txt"):
         new_file = filename.replace(".txt", "") + "inBB.txt"
         output = codecs.open(new_file, "w", "utf-8")
         for line in codecs.open(filename, "r", "utf-8"):
@@ -123,7 +124,7 @@ class Countries:
 
 
     @staticmethod
-    def filterCountriesInBB(filename="../resources/cities15000.txt"):
+    def filterCountriesInBB(filename="../resources/cities15000inBBFilter.txt"):
         """
         We can do this based on the capital coordinates to simplify stuff.
         For each country we have the capital and we search that capital in the Cities Dict, take the coords and if they
@@ -138,10 +139,10 @@ if __name__ == '__main__':
     logger = logging.getLogger("locations.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
-    Cities.filterCitiesInBB()
 
     cities = Cities.loadFromFile()
-    citiesEU = Cities.filterEuropeanCities(cities)
+    citiesEU = Cities.filterEuropeanCities(cities,)
+    print len(citiesEU)
     print citiesEU.keys()[:100]
 
     countries = Countries.loadFromFile()

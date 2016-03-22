@@ -103,6 +103,16 @@ def getLocationsFromToken(token, cityDict, countryDict):
     return city, country
 
 
+def cleanLists(potentialCities, potentialCountries):
+    c = set(potentialCities)
+    if "" in c:
+        c.remove("")
+    C = set(potentialCountries)
+    if "" in C:
+        C.remove("")
+    return c, C
+
+
 def getUserLocation(tweet, cityDict, countryDict, outputFile):
     """
     THis field is an empty string
@@ -119,67 +129,80 @@ def getUserLocation(tweet, cityDict, countryDict, outputFile):
     outputFile.write(locationField + "\n")
 
     # 1. check if user loc is word or country - unigrams - to lower
-    city, country = getLocationsFromToken(locationField, cityDict, countryDict)
+    city, country = getLocationsFromToken(locationField.strip(), cityDict, countryDict)
     if city or country:
         outputFile.write("1 " + city + "|" + country + "\n")
         potentialCities.append(city)
-        potentialCountries.append(countries)
-        return potentialCities, potentialCountries
+        potentialCountries.append(country)
+        c, C = cleanLists(potentialCities, potentialCountries)
+        return c, C
+
     # 2. split by ,
     elif "," in locationField:
         locArray = locationField.split(",")
         for token in locArray:
-            city, country = getLocationsFromToken(token, cityDict, countryDict)
+            city, country = getLocationsFromToken(token.strip(), cityDict, countryDict)
             if city or country:
                 outputFile.write("2 " + city + "|" + country + "\n")
                 potentialCities.append(city)
-                potentialCountries.append(countries)
-        return potentialCities, potentialCountries
+                potentialCountries.append(country)
+        c, C = cleanLists(potentialCities, potentialCountries)
+        return c, C
+
     # 3. split by /
     elif "/" in locationField:
-        locArray = locationField.split(",")
+        locArray = locationField.split("/")
         for token in locArray:
-            city, country = getLocationsFromToken(token, cityDict, countryDict)
+            city, country = getLocationsFromToken(token.strip(), cityDict, countryDict)
             if city or country:
                 outputFile.write("3 " + city + "|" + country + "\n")
                 potentialCities.append(city)
-                potentialCountries.append(countries)
-        return potentialCities, potentialCountries
+                potentialCountries.append(country)
+        c, C = cleanLists(potentialCities, potentialCountries)
+        return c, C
 
     # 4. split by " "
-    # if " " in locationField:
-    #     locArray = locationField.split(",")
-    #     for token in locArray:
-    #         city, country = getLocationsFromToken(token, cityDict, countryDict)
-    #         outputFile.write("4 " + city + "|" + country + "\n")
+    elif " " in locationField:
+        locArray = locationField.split(" ")
+        for token in locArray:
+            if len(token)>2:
+                city, country = getLocationsFromToken(token, cityDict, countryDict)
+                if city or country:
+                    outputFile.write("4 " + city + "|" + country + "\n")
+                    potentialCities.append(city)
+                    potentialCountries.append(country)
+        c, C = cleanLists(potentialCities, potentialCountries)
+        return c, C
 
     # 5. tokenize with util and get bigram and trigrams - to lower
-    # bi
     else:
         tokenList = twokenize.tokenize(locationField.lower())
-        tokens = ngrams.window_no_twitter_elems(tokenList,2)
+        tokens = ngrams.window_no_twitter_elems(tokenList, 1)
         for token in tokens:
-            city, country = getLocationsFromToken(token, cityDict, countryDict)
+            city, country = getLocationsFromToken(token.strip(), cityDict, countryDict)
             if city or country:
                 outputFile.write("5a " + city + "|" + country + "\n")
                 potentialCities.append(city)
-                potentialCountries.append(countries)
+                potentialCountries.append(country)
+        tokens = ngrams.window_no_twitter_elems(tokenList, 2)
+        for token in tokens:
+            city, country = getLocationsFromToken(token.strip(), cityDict, countryDict)
+            if city or country:
+                outputFile.write("5a " + city + "|" + country + "\n")
+                potentialCities.append(city)
+                potentialCountries.append(country)
 
-        tokens = ngrams.window_no_twitter_elems(tokenList,3)
+        tokens = ngrams.window_no_twitter_elems(tokenList, 3)
         for token in tokens:
             city, country = getLocationsFromToken(token, cityDict, countryDict)
         if city or country:
             outputFile.write("5b " + city + "|" + country + "\n")
             potentialCities.append(city)
-            potentialCountries.append(countries)
-        return potentialCities, potentialCountries
+            potentialCountries.append(country)
+        c, C = cleanLists(potentialCities, potentialCountries)
+        return c, C
 
-    c = set(potentialCities)
-    if "" in c:
-        c.remove("")
-    C = set(potentialCountries)
-    if "" in C:
-        C.remove("")
+    c, C = cleanLists(potentialCities, potentialCountries)
     return c, C
 
 
@@ -219,9 +242,9 @@ if __name__ == '__main__':
 
     cities = locations.Cities.loadFromFile()
     euroCities = locations.Cities.filterEuropeanCities(cities)
-    print euroCities["washington"]
-    print cities["raqqa"]
-    print euroCountries["turkey"], countries["turkey"]  # only in countries!
+    # print euroCities["washington"]
+    # print cities["raqqa"]
+    # print euroCountries["turkey"], countries["turkey"]  # only in countries!
 
     citiesAscii = locations.Cities.loadFromFile(ascii=True)
     euroCitiesAscii = locations.Cities.filterEuropeanCities(citiesAscii)
@@ -242,8 +265,10 @@ if __name__ == '__main__':
         if getCoords(tweet) is not None:
             geotaggedTweets.append(tweetId)
         if tweet["user_location"]:
-            userLocationTweets.append(tweetId)
             potentialCities, potentialCountries = getUserLocation(tweet, euroCities, euroCountries, outputFile)
+            if (len(potentialCities) > 0) or (len(potentialCountries) > 0):
+                userLocationTweets.append(tweetId)
+                print repr(tweet["user_location"]), potentialCities, potentialCountries
 
 
         # if tweetId % 100 == 0:
