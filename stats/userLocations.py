@@ -28,7 +28,7 @@ def addUserToCorrespondingDict(userID, userType, userLocation, userScreenName, t
 
 def getUsersWithLocation(tweetsAsDictionary):
     user_dict = dict()
-
+ 
     i = 0
     for tweet in tweetsAsDictionary:
         tweetText = tweet['text'].lower()
