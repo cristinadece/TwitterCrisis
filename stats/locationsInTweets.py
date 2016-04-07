@@ -52,35 +52,40 @@ def getFilterredTweetsAsDict(path):
 
 
 def getLocationFromTweetText(tweet, cityDict, countryDict):
-    cityList = list()
-    countryList = list()
-    for token in tweet["tokenized_text"]:  # todo: bigrams, trigrams, check if hashtag is a place by removing hash
-            if token.lower() in cityDict.keys():  # The dict has keys in lowercase
-                cityList.append(token.lower())
-            if token.lower() in countryDict.keys():
-                countryList.append(token.lower())
-    return cityList, countryList  # these need to be added to a bigger list for all tweets
+    """
+    Here we should have all cities and all countries of the world!!! so the dictionaries are not the european ones!
+    """
+    potentialCities = set()
+    potentialCountries = set()
+    tokenList = tweet["tokenized_text"]
 
+    # unigrams
+    tokens = ngrams.window(tokenList, 1)
+    for token in tokens:
+        token = token.replace("#", "")  # see if hashtags are countries
+        city, country = getLocationsFromToken(token.strip(), cityDict, countryDict)
+        #if city or country:
+        potentialCities.add(city)
+        potentialCountries.add(country)
 
-# def countLocationsInTweetText(locationList, locationDict, country=False):
-#     """
-#
-#     :param locationList:
-#     :param locationDict:
-#     :param country:
-#     :return:
-#     """
-#     # output = codecs.open(outputFile, "w", "utf-8")
-#     orderredLocations = Counter(locationList).most_common()
-#     for loc in orderredLocations:
-#         lat = locationDict[loc[0]][3]
-#         lon = locationDict[loc[0]][2]
-#         try:
-#             s = loc[0] + "," + str(lon) + "," + str(lat) + "," + str(loc[1]) + "\n"
-#         except:
-#             print "error happens here: ", inputFile, loc, locationDict[loc]
-#     #     output.write(s)
-#     # output.close()
+    # bigrams
+    tokens = ngrams.window(tokenList, 2)
+    for token in tokens:
+        city, country = getLocationsFromToken(token.strip(), cityDict, countryDict)
+        #if city or country:
+        potentialCities.add(city)
+        potentialCountries.add(country)
+
+    # trigrams
+    tokens = ngrams.window(tokenList, 3)
+    for token in tokens:
+        city, country = getLocationsFromToken(token, cityDict, countryDict)
+        #if city or country:
+        potentialCities.add(city)
+        potentialCountries.add(country)
+
+    c, C = cleanLists(potentialCities, potentialCountries)
+    return c, C
 
 
 def getLocationsFromToken(token, cityDict, countryDict):
@@ -112,7 +117,6 @@ def getUserLocation(locationField, cityDict, countryDict):
     us = False
     potentialCities = set()
     potentialCountries = set()
-    city, country = getLocationsFromToken(locationField.lower(), cityDict, countryDict)
 
     # 1. split by / - the only char that is not in the tokeniker!
     if "/" in locationField:
@@ -151,9 +155,9 @@ def getUserLocation(locationField, cityDict, countryDict):
         if token.lower() in us_states:
             us = True
         city, country = getLocationsFromToken(token, cityDict, countryDict)
-    if city or country:
-        potentialCities.add(city)
-        potentialCountries.add(country)
+        if city or country:
+            potentialCities.add(city)
+            potentialCountries.add(country)
 
     c, C = cleanLists(potentialCities, potentialCountries)
     return c, C, us

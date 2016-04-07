@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 stopwords = ["dalai", "buy", "best", "deal", "obama", "clinton", "police", "goes", "reading", "born", "manage", "gay",
              "barry", "dinar", "sale", "march", "nice", "mary", "vladimir", "zug", "boom", "anna", "gap", "york", "bar",
-             "salt", "wedding", "of", "boston"]
+             "salt", "wedding", "of", "boston", "lincoln", "washington"]
 
 stopwordsEuro = ["washington", "perth"]
 
@@ -40,6 +40,13 @@ def loadUSstates(filename="resources/us_states.tsv"):
             us_states_list.append(state_data[1].lower())
     us_states_list.append("usa")
     us_states_list.append("us")
+
+    ### wtf
+    us_states_list.remove("ok")
+    us_states_list.remove("de")
+    us_states_list.remove("la")
+    us_states_list.remove("hi")
+    us_states_list.remove("il")
     return us_states_list
 
 class Cities:
@@ -51,6 +58,9 @@ class Cities:
     def loadFromFile(filename="resources/cities15000inBB.txt", ascii=False):
         """
         This method load a dictionary of cities where the key is either the name or the asciiname
+
+        The BB is EURASIA
+
         :param filename:
         :param ascii: True if we want the dictionary to have the asciinames as key, False otherwise
         :return:
@@ -126,8 +136,9 @@ class Countries:
                 capital = countryData[5]
                 population = countryData[7]
                 continent = countryData[8]
-                if (name not in stopwords):
-                    countriesDict[name.lower()] = tuple([name, capital, population, continent])
+                countryCode = countryData[0]
+                if (name not in stopwords) and continent in ["EU", "AS", "AF"]:
+                    countriesDict[name.lower()] = tuple([name, capital, population, continent, countryCode])
         countriesDict["uk"] = countriesDict["united kingdom"]
         countriesDict["england"] = countriesDict["united kingdom"]
         print "All countries: ", len(countriesDict)
