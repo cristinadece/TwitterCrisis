@@ -132,7 +132,7 @@ def addTweetTextLocations(tweet, cityDict, countryDict, ccDict):
         print cityDict[city]
         countryName = ccDict[countryCode]
         countriesInTweetText.add(countryName)
-        
+
     tweet["text_location_mentions"] = list(citiesInTweetText)
     tweet["text_location_mentions_c"] = list(countriesInTweetText)  # todo add also country code?
     return tweet
