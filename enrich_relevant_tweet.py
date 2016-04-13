@@ -65,7 +65,44 @@ def addUserExLocation(tweet, euroCities, euroCountries):
     return tweet
 
 
-def addFinalLocation(tweet, euroCities):
+# def addFinalLocation(tweet, euroCities):
+#     """
+#
+#     :param tweet:
+#     :param euroCities:
+#     :return:
+#     """
+#
+#     # country
+#     if tweet["place_ex_location_c"]:
+#         tweet["final_location_c"] = tweet["place_ex_location_c"]
+#     elif tweet["user_ex_location_c"]:
+#         tweet["final_location_c"] = tweet["user_ex_location_c"]
+#     else:
+#         tweet["final_location_c"] = None  # these should be actually removed
+#
+#     # city
+#     if tweet["place_ex_location"]:
+#         tweet["final_location"] = tweet["place_ex_location"]
+#     elif tweet["user_ex_location"]:
+#         if len(tweet["user_ex_location"]) > 1:
+#             # same country different cities
+#             locOrderedByPop = dict()
+#             for loc in tweet["user_ex_location"]:
+#                 population = euroCities[loc][5]
+#                 locOrderedByPop[loc] = population
+#             sorted_x = sorted(locOrderedByPop.items(), key=operator.itemgetter(1))
+#             print "Ambiguous location", tweet["user_ex_location"], sorted_x[0][0]
+#             tweet["final_location"] = sorted_x[0][0]
+#         else:
+#             tweet["final_location"] = tweet["user_ex_location"][0]
+#     else:
+#         tweet["final_location"] = None  # these should be actually removed
+#
+#     return tweet
+
+
+def addFinalLocationAdapted(tweet, euroCities):
     """
 
     :param tweet:
@@ -74,7 +111,9 @@ def addFinalLocation(tweet, euroCities):
     """
 
     # country
-    if tweet["place_ex_location_c"]:
+    if "gps_ex_location_c" in tweet:
+        tweet["final_location_c"] = tweet["gps_ex_location_c"]
+    elif "place_ex_location_c" in tweet:
         tweet["final_location_c"] = tweet["place_ex_location_c"]
     elif tweet["user_ex_location_c"]:
         tweet["final_location_c"] = tweet["user_ex_location_c"]
@@ -82,7 +121,9 @@ def addFinalLocation(tweet, euroCities):
         tweet["final_location_c"] = None  # these should be actually removed
 
     # city
-    if tweet["place_ex_location"]:
+    if "gps_ex_location" in tweet:
+        tweet["final_location"] = tweet["gps_ex_location"]
+    elif "place_ex_location" in tweet:
         tweet["final_location"] = tweet["place_ex_location"]
     elif tweet["user_ex_location"]:
         if len(tweet["user_ex_location"]) > 1:
@@ -92,12 +133,13 @@ def addFinalLocation(tweet, euroCities):
                 population = euroCities[loc][5]
                 locOrderedByPop[loc] = population
             sorted_x = sorted(locOrderedByPop.items(), key=operator.itemgetter(1))
-            print "Ambiguous location", tweet["user_ex_location"]
+            #print "Ambiguous location", tweet["user_ex_location"], sorted_x[0][0]
             tweet["final_location"] = sorted_x[0][0]
         else:
-            tweet["final_location"] = tweet["user_ex_location"]
+            tweet["final_location"] = tweet["user_ex_location"][0]
     else:
         tweet["final_location"] = None  # these should be actually removed
+
 
     return tweet
 
@@ -129,7 +171,7 @@ def addTweetTextLocations(tweet, cityDict, countryDict, ccDict):
     citiesInTweetText, countriesInTweetText = locationsInTweets.getLocationFromTweetText(tweet, cityDict, countryDict)
     for city in citiesInTweetText:
         countryCode = cityDict[city][4]
-        print cityDict[city]
+        # print cityDict[city]
         countryName = ccDict[countryCode]
         countriesInTweetText.add(countryName)
 
@@ -163,15 +205,15 @@ def main():
     i = 0
     for tweet in tweetsAsDict:
         i += 1
-        enrichedTweet = addUserExLocation(tweet, euroCities, euroCountries)
-        print repr(enrichedTweet["user_location"])
-        print enrichedTweet["user_ex_location"], enrichedTweet["user_ex_location_c"]
-        # enrichedTweet = addFinalLocation(tweet, euroCities)
+        enrichedTweet1 = addUserExLocation(tweet, euroCities, euroCountries)
+        # print repr(enrichedTweet["user_location"])
+        # print enrichedTweet["user_ex_location"], enrichedTweet["user_ex_location_c"]
+        enrichedTweet2 = addFinalLocationAdapted(enrichedTweet1, euroCities)
         # print enrichedTweet["final_location"], enrichedTweet["final_location_c"]
-        enrichedTweet = addTweetTextLocations(tweet, cities, countries, ccDict)
-        print repr(enrichedTweet["text"])
-        print enrichedTweet["text_location_mentions"], enrichedTweet["text_location_mentions_c"]
-        print
+        enrichedTweet = addTweetTextLocations(enrichedTweet2, cities, countries, ccDict)
+        # print repr(enrichedTweet["text"])
+        # print enrichedTweet["text_location_mentions"], enrichedTweet["text_location_mentions_c"]
+        # print
 
         # if "paris. " in tweet["user_location"]:
         #     enrichedTweet = addUserExLocation(tweet, euroCities, euroCountries)
@@ -179,6 +221,7 @@ def main():
         #     print enrichedTweet["user_ex_location"], enrichedTweet["user_ex_location_c"]
 
         outputEnriched.write(json.dumps(enrichedTweet) + "\n")
+        # print enrichedTweet
         # if i % 40 == 0:
         #     break
 
