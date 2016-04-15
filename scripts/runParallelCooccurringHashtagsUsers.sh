@@ -3,7 +3,7 @@
 CORES=16
 INPUT_DIR=/data/muntean/tweets
 OUTPUT_DIR=/home/muntean/output-sem-coocc-hashtags-by-users
-COMMAND="time python ../stats/cooccurringHashtagsByUsers.py"
+COMMAND="time python ../processing/cooccurringHashtagsByUsers.py"
 
 for LINE in `ls $INPUT_DIR/*.gz`
 do

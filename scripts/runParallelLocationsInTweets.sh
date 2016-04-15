@@ -3,7 +3,7 @@
 CORES=16
 INPUT_DIR=/home/muntean/relevant-tweets
 OUTPUT_DIR=/home/muntean/locations-in-tweets-per-day
-COMMAND="time python ../stats/locationsInTweets.py"
+COMMAND="time python ../processing/locationsInTweets.py"
 
 for LINE in `ls $INPUT_DIR/*.output`
 do

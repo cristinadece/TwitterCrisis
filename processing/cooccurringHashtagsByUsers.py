@@ -69,7 +69,7 @@ def resolveAmbiguousUsers(pro_refugee_users, anti_refugee_users, neutral_refugee
 
     date = re.findall('(\d+)', tweetDir)[0]
 
-    output = open("some-stats-" + date + ".tsv", "w")
+    output = open("some-processing-" + date + ".tsv", "w")
     output.write( "Anti Total: " + str(len(anti_refugee_users)) + "\n")
     output.write( "Pro Total: " + str(len(pro_refugee_users)) + "\n")
     output.write( "Neutral Total: " + str(len(neutral_refugee_users)) + "\n")

@@ -4,7 +4,7 @@ CORES=6
 #INPUT_DIR=/home/muntean/english-tweets-09
 INPUT_DIR=/data/muntean/tweets
 OUTPUT_DIR=/home/muntean/output-sem-user-loc
-COMMAND="python ../stats/userLocations.py"
+COMMAND="python ../processing/userLocations.py"
 
 for LINE in `ls $INPUT_DIR/*.gz`
 do

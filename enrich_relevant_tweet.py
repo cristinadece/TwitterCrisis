@@ -13,10 +13,10 @@ import logging
 import sys
 import operator
 from util import locations
-from stats import locationsInTweets
+from processing import locationsInTweets
 
 
-def tweetIter(inputfile):
+def   tweetIter(inputfile):
     """
     Read simplified relevant tweet
     """
