@@ -94,7 +94,8 @@ def getLocationsFromToken(token, cityDict, countryDict):
     if cityDict[token]:
         city = token
     if countryDict[token]:
-        country = token
+        # country = token
+        country = countryDict[token][0]  # we take the name of the country from the tuple, elim. both UK and United K.
     return city, country
 
 

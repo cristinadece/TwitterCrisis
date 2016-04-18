@@ -16,7 +16,7 @@ from util import locations
 from processing import locationsInTweets
 
 
-def   tweetIter(inputfile):
+def tweetIter(inputfile):
     """
     Read simplified relevant tweet
     """
@@ -65,41 +65,91 @@ def addUserExLocation(tweet, euroCities, euroCountries):
     return tweet
 
 
-# def addFinalLocation(tweet, euroCities):
-#     """
-#
-#     :param tweet:
-#     :param euroCities:
-#     :return:
-#     """
-#
-#     # country
-#     if tweet["place_ex_location_c"]:
-#         tweet["final_location_c"] = tweet["place_ex_location_c"]
-#     elif tweet["user_ex_location_c"]:
-#         tweet["final_location_c"] = tweet["user_ex_location_c"]
-#     else:
-#         tweet["final_location_c"] = None  # these should be actually removed
-#
-#     # city
-#     if tweet["place_ex_location"]:
-#         tweet["final_location"] = tweet["place_ex_location"]
-#     elif tweet["user_ex_location"]:
-#         if len(tweet["user_ex_location"]) > 1:
-#             # same country different cities
-#             locOrderedByPop = dict()
-#             for loc in tweet["user_ex_location"]:
-#                 population = euroCities[loc][5]
-#                 locOrderedByPop[loc] = population
-#             sorted_x = sorted(locOrderedByPop.items(), key=operator.itemgetter(1))
-#             print "Ambiguous location", tweet["user_ex_location"], sorted_x[0][0]
-#             tweet["final_location"] = sorted_x[0][0]
-#         else:
-#             tweet["final_location"] = tweet["user_ex_location"][0]
-#     else:
-#         tweet["final_location"] = None  # these should be actually removed
-#
-#     return tweet
+def addFinalLocation(tweet, euroCities):
+    """
+
+    :param tweet:
+    :param euroCities:
+    :return:
+    """
+    flag = None
+
+    # 1. check for city; if we find country simply return
+    if "gps_ex_location" in tweet:
+        tweet["final_location"] = tweet["gps_ex_location"]
+        if "gps_ex_location_c" in tweet:
+            tweet["final_location_c"] = tweet["gps_ex_location_c"]
+            return tweet
+        flag = "gps_city"
+    elif "place_ex_location" in tweet:
+        tweet["final_location"] = tweet["place_ex_location"]
+        if "place_ex_location_c" in tweet:
+            tweet["final_location_c"] = tweet["place_ex_location_c"]
+            return tweet
+        flag = "place_city"
+    elif tweet["user_ex_location"]:
+        if len(tweet["user_ex_location"]) > 1:
+            # same country different cities
+            locOrderedByPop = dict()
+            for loc in tweet["user_ex_location"]:
+                population = euroCities[loc][5]
+                locOrderedByPop[loc] = population
+            sorted_x = sorted(locOrderedByPop.items(), key=operator.itemgetter(1))
+            # print "Ambiguous location", tweet["user_ex_location"], sorted_x[0][0]
+            tweet["final_location"] = sorted_x[0][0]
+        else:
+            tweet["final_location"] = tweet["user_ex_location"][0]
+        if tweet["user_ex_location_c"]:
+            tweet["final_location_c"] = tweet["user_ex_location_c"]
+            return tweet
+        flag = "user_city"
+
+    if flag is not None:
+        print "We have city but no country", tweet
+    else:
+        # 2. check for country (no city, flag should be None)
+        if tweet["user_ex_location_c"]:
+            tweet["final_location_c"] = tweet["user_ex_location_c"]
+            flag = "user_country"
+        elif "gps_ex_location_c" in tweet:
+            tweet["final_location_c"] = tweet["gps_ex_location_c"]
+            flag = "gps_country"
+        elif "place_ex_location_c" in tweet:
+            tweet["final_location_c"] = tweet["place_ex_location_c"]
+            flag = "place_country"
+
+    if flag in ["user_country", "gps_country", "place_country"]:
+        tweet["final_location"] = None
+
+    if flag is None:
+        tweet["final_location"] = None
+        tweet["final_location_c"] = None
+
+    return tweet
+
+def sameGPSCountry(tweet):
+    """
+    We consider the fact plat GPS and Place appear only when a value is different from None
+    :param tweet:
+    :return: True if the countries are the same, False if they are different
+    and True if the fields are however different.
+    """
+    if "gps_ex_location_c" in tweet:
+        if tweet["user_ex_location_c"]:
+            return tweet["gps_ex_location_c"] == tweet["user_ex_location_c"]
+    return True
+
+def samePlaceCountry(tweet):
+    """
+    We consider the fact plat GPS and Place appear only when a value is different from None
+    :param tweet:
+    :return: True if the countries are the same, False if they are different
+    and True if the fields are however different.
+    """
+    if "place_ex_location_c" in tweet:
+        if tweet["user_ex_location_c"]:
+            return tweet["place_ex_location_c"] == tweet["user_ex_location_c"]
+    return True
 
 
 def addFinalLocationAdapted(tweet, euroCities):
@@ -139,7 +189,6 @@ def addFinalLocationAdapted(tweet, euroCities):
             tweet["final_location"] = tweet["user_ex_location"][0]
     else:
         tweet["final_location"] = None  # these should be actually removed
-
 
     return tweet
 
@@ -208,8 +257,11 @@ def main():
         enrichedTweet1 = addUserExLocation(tweet, euroCities, euroCountries)
         # print repr(enrichedTweet["user_location"])
         # print enrichedTweet["user_ex_location"], enrichedTweet["user_ex_location_c"]
-        enrichedTweet2 = addFinalLocationAdapted(enrichedTweet1, euroCities)
+
+        # enrichedTweet2 = addFinalLocationAdapted(enrichedTweet1, euroCities)
+        enrichedTweet2 = addFinalLocation(enrichedTweet1, euroCities)
         # print enrichedTweet["final_location"], enrichedTweet["final_location_c"]
+
         enrichedTweet = addTweetTextLocations(enrichedTweet2, cities, countries, ccDict)
         # print repr(enrichedTweet["text"])
         # print enrichedTweet["text_location_mentions"], enrichedTweet["text_location_mentions_c"]
