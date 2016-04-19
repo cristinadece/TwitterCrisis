@@ -119,7 +119,7 @@ def main():
     euroCities = locations.Cities.filterEuropeanCities(cities)
     citiesAscii = locations.Cities.loadFromFile(ascii=True)
     euroCitiesAscii = locations.Cities.filterEuropeanCities(citiesAscii)
-    ccDict = enrich_relevant_tweet.countryCodeDict(countries)
+    ccDict = locations.Countries.countryCodeDict(countries)
 
 
     ### dump csv for plots in carto db

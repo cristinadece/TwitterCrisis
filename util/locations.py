@@ -8,9 +8,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 stopwords = ["dalai", "buy", "best", "deal", "obama", "clinton", "police", "goes", "reading", "born", "manage", "gay",
              "barry", "dinar", "sale", "march", "nice", "mary", "vladimir", "zug", "boom", "anna", "gap", "york", "bar",
-             "salt", "wedding", "of", "boston", "lincoln", "washington", ]
+             "salt", "wedding", "of", "boston", "lincoln", "washington"]
 
-stopwordsEuro = ["washington", "perth", "lincon"]
+stopwordsEuro = ["washington", "perth", "lincon", "roman"]
 
 # eg New York
 # [[[-24.08203125,14.0939571778],[-24.08203125,66.9988437919],[70.13671875,66.9988437919],[70.13671875,14.0939571778],

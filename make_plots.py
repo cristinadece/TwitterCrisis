@@ -93,17 +93,21 @@ def plotSentimentPerDay(tweetsPerDay, tweetIndex):
     plot_distributions.plotBarWithLables2Distrib(against, pro, labels, "User Sentiment per Day", rot=70)
 
 
+
+
+
+
 def main():
 
-    ti = createTweetIndex("/Users/muntean/refugees-with-final.json")
-    di = createDailyTweetsMask(ti)
-    ci = createUserCountryTweetsMask(ti)
+    tweetIndex = createTweetIndex("/Users/muntean/refugees-output/refugees-with-final-new.json")
+    dailyTweetsMask = createDailyTweetsMask(tweetIndex)
+    userCountryTweetsMask = createUserCountryTweetsMask(tweetIndex)
     print "Finished indexing tweets and creating masks"
 
-    # plotTweetsPerCountry(ci)
-    # plotTweetsPerDay(di)
-    plotSentimentPerCountry(ci, ti)
-    # plotSentimentPerDay(di, ti)
+    # plotTweetsPerCountry(userCountryTweetsMask)
+    # plotTweetsPerDay(dailyTweetsMask)
+    plotSentimentPerCountry(userCountryTweetsMask, userCountryTweetsMask)
+    # plotSentimentPerDay(dailyTweetsMask, userCountryTweetsMask)
 
 
 if __name__ == '__main__':

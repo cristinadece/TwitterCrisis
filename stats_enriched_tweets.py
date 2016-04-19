@@ -251,10 +251,27 @@ def createDayIndex(filename):
     return dayIndex
 
 
+def buildCountrySentiIndex(filename):
+    countryIndex = dict()
+    tweetsAsDict = tweetIter(filename)
+    i = 0
+    for tweet in tweetsAsDict:
+        i += 1
+        country = tweet["text_location_mentions_c"]
+        day = tweet["day"]
+        sentiment = tweet["sentiment_tweet"]
+
+
+
+        if i % 100000 == 0:
+            print i
+            # break
+    return countryIndex
+
 
 def main():
 
-    countSimple("/Users/muntean/refugees-with-final.json")
+    countSimple("/Users/muntean/refugees-output/refugees-with-final-new.json")
 
 
 
