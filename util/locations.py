@@ -8,9 +8,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 stopwords = ["dalai", "buy", "best", "deal", "obama", "clinton", "police", "goes", "reading", "born", "manage", "gay",
              "barry", "dinar", "sale", "march", "nice", "mary", "vladimir", "zug", "boom", "anna", "gap", "york", "bar",
-             "salt", "wedding", "of", "boston", "lincoln", "washington"]
+             "salt", "wedding", "of", "boston", "lincoln", "washington", ]
 
-stopwordsEuro = ["washington", "perth"]
+stopwordsEuro = ["washington", "perth", "lincon"]
 
 # eg New York
 # [[[-24.08203125,14.0939571778],[-24.08203125,66.9988437919],[70.13671875,66.9988437919],[70.13671875,14.0939571778],
@@ -55,12 +55,13 @@ class Cities:
         pass
 
     @staticmethod
-    def loadFromFile(filename="resources/cities15000inBB.txt", ascii=False):
+    def loadFromFile(filename="resources/cities15000.txt", ascii=False):
         """
-        This method load a dictionary of cities where the key is either the name or the asciiname
-
+        options: filename="resources/cities15000inBB.txt" or filename="resources/cities15000.txt"
         The BB is EURASIA
 
+        This method load a dictionary of cities where the key is either the name or the asciiname
+        Final version : for mentions: Africa, Asia,
         :param filename:
         :param ascii: True if we want the dictionary to have the asciinames as key, False otherwise
         :return:
@@ -75,7 +76,8 @@ class Cities:
             countrycode = locationData[8]
             population = int(locationData[14])
             timezone = locationData[17]
-            if (name not in stopwords) and (population > 50000):
+            continent = timezone.split("/")[0]
+            if (name not in stopwords) and (population > 50000) and continent in ["Africa", "Asia", "Europe"]:
                 if ascii:
                     citiesDict[asciiname.lower()] = tuple([name, asciiname, longitude, latitude, countrycode, population, timezone])
                 else:
@@ -88,7 +90,6 @@ class Cities:
     def filterEuropeanCities(citiesDict):
         citiesEurope = defaultdict(tuple)
 
-
         for city, cityTuple in citiesDict.iteritems():
             # try:
             #     print cityTuple[6]
@@ -99,9 +100,8 @@ class Cities:
         print "European cities: ", len(citiesEurope)
         return citiesEurope
 
-
     @staticmethod
-    def filterCitiesInBB(filename="resources/cities15000inBBFilter.txt"):
+    def filterCitiesInBB(filename):
         new_file = filename.replace(".txt", "") + "inBB.txt"
         output = codecs.open(new_file, "w", "utf-8")
         for line in codecs.open(filename, "r", "utf-8"):
@@ -163,7 +163,24 @@ class Countries:
 
 
     @staticmethod
-    def filterCountriesInBB(filename="resources/cities15000inBBFilter.txt"):
+    def countryCodeDict(countryDict):
+        """
+        Maps the country code to country name
+        !!! Attention, we should do it for all Countries instead of just european
+        :param countryDict:
+        :return:
+        """
+        ccDict = dict()
+        for k, v in countryDict.items():
+            if len(v) != 5:
+                print "Attention", k, v
+            else:
+                ccDict[v[4]] = v[0]
+        return ccDict
+
+
+    @staticmethod
+    def filterCountriesInBB(filename):
         """
         We can do this based on the capital coordinates to simplify stuff.
         For each country we have the capital and we search that capital in the Cities Dict, take the coords and if they

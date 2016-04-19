@@ -23,6 +23,7 @@ def loadData(filename):
     data = np.genfromtxt(filename, dtype=str)
     return data
 
+
 def plotBarMinimal(distrib):
     setStyle()
     plt.figure()
@@ -30,6 +31,7 @@ def plotBarMinimal(distrib):
     width = 0.35  # the width of the bars
     plt.bar(ind, distrib, width)
     plt.show()
+
 
 def plotBarWithLables(distrib, labels, title, rot=0):
     setStyle()
@@ -79,6 +81,7 @@ def plotBarWithLables2Distrib(a,b, labels, title, rot=0):
     # # plt.show()
     # plt.tight_layout()
     # plt.savefig("/tmp/midsomma2-hour.pdf")
+
 
 def main():
     pass

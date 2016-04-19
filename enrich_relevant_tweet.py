@@ -127,30 +127,6 @@ def addFinalLocation(tweet, euroCities):
 
     return tweet
 
-def sameGPSCountry(tweet):
-    """
-    We consider the fact plat GPS and Place appear only when a value is different from None
-    :param tweet:
-    :return: True if the countries are the same, False if they are different
-    and True if the fields are however different.
-    """
-    if "gps_ex_location_c" in tweet:
-        if tweet["user_ex_location_c"]:
-            return tweet["gps_ex_location_c"] == tweet["user_ex_location_c"]
-    return True
-
-def samePlaceCountry(tweet):
-    """
-    We consider the fact plat GPS and Place appear only when a value is different from None
-    :param tweet:
-    :return: True if the countries are the same, False if they are different
-    and True if the fields are however different.
-    """
-    if "place_ex_location_c" in tweet:
-        if tweet["user_ex_location_c"]:
-            return tweet["place_ex_location_c"] == tweet["user_ex_location_c"]
-    return True
-
 
 def addFinalLocationAdapted(tweet, euroCities):
     """
@@ -191,16 +167,6 @@ def addFinalLocationAdapted(tweet, euroCities):
         tweet["final_location"] = None  # these should be actually removed
 
     return tweet
-
-
-def countryCodeDict(countryDict):
-    ccDict = dict()
-    for k, v in countryDict.items():
-        if len(v) != 5:
-            print "Attention", k, v
-        else:
-            ccDict[v[4]] = v[0]
-    return ccDict
 
 
 def addTweetTextLocations(tweet, cityDict, countryDict, ccDict):
@@ -245,9 +211,9 @@ def main():
     euroCountries = locations.Countries.filterEuropeanCountries(countries)
     cities = locations.Cities.loadFromFile()
     euroCities = locations.Cities.filterEuropeanCities(cities)
-    citiesAscii = locations.Cities.loadFromFile(ascii=True)
-    euroCitiesAscii = locations.Cities.filterEuropeanCities(citiesAscii)
-    ccDict = countryCodeDict(countries)
+    # citiesAscii = locations.Cities.loadFromFile(ascii=True)
+    # euroCitiesAscii = locations.Cities.filterEuropeanCities(citiesAscii)
+    ccDict = locations.Countries.countryCodeDict(countries)
 
     # start iterating tweets
     tweetsAsDict = tweetIter(inputRelevant)
