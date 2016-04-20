@@ -6,8 +6,8 @@ geo-events-foursquare : make_plots
 -----------------------------
 
 '''
-
-from plots import plot_distributions
+import stats_enriched_tweets
+from plots import plot_templates
 from stats_enriched_tweets import createTweetIndex, createDailyTweetsMask, createUserCountryTweetsMask
 
 def plotTweetsPerCountry(tweetsPerCountryDict):
@@ -21,7 +21,7 @@ def plotTweetsPerCountry(tweetsPerCountryDict):
     values = list(zip(*tweetsPerCountry)[0])
     labels = list(zip(*tweetsPerCountry)[1])
     # distributions.plotBarMinimal(values)
-    plot_distributions.plotBarWithLables(values, labels, "Number of tweets per country")
+    plot_templates.plotBarWithLables(values, labels, "Number of tweets per country")
 
 
 def plotSentimentPerCountry(tweetsPerCountry, tweetIndex):
@@ -53,7 +53,7 @@ def plotSentimentPerCountry(tweetsPerCountry, tweetIndex):
     against = list(zip(*data)[1])
     pro = list(zip(*data)[2])
 
-    plot_distributions.plotBarWithLables2Distrib(against, pro, labels, "User Sentiment per Country")
+    plot_templates.plotBarWithLables2Distrib(against, pro, labels, "User Sentiment per Country")
 
 
 def plotTweetsPerDay(tweetsPerDayDict):
@@ -62,7 +62,7 @@ def plotTweetsPerDay(tweetsPerDayDict):
     values = list(zip(*tweetsPerDay)[0])
     labels = list(zip(*tweetsPerDay)[1])
     # distributions.plotBarMinimal(values)
-    plot_distributions.plotBarWithLables(values, labels, "Number of tweets per day", rotation=70)
+    plot_templates.plotBarWithLables(values, labels, "Number of tweets per day", rotation=70)
 
 
 def plotSentimentPerDay(tweetsPerDay, tweetIndex):
@@ -90,24 +90,46 @@ def plotSentimentPerDay(tweetsPerDay, tweetIndex):
     against = list(zip(*data)[1])
     pro = list(zip(*data)[2])
 
-    plot_distributions.plotBarWithLables2Distrib(against, pro, labels, "User Sentiment per Day", rot=70)
+    plot_templates.plotBarWithLables2Distrib(against, pro, labels, "User Sentiment per Day", rot=70)
 
 
+def plotCountrySentimentPerDay(dailySentiDict):
+    labels = list()
+    against = list()
+    pro = list()
 
+    dailySentiDictSorted = sorted(dailySentiDict.iteritems(), key=lambda x: x[0])  # order by date
+    for record in dailySentiDictSorted:
+        day = record[0]
+        sentiList = record[1]
+        labels.append(day)
+        count_pro = sentiList.count(1)
+        pro.append(count_pro)
+        count_anti = sentiList.count(0)
+        against.append(count_anti)
+
+    plot_templates.plotBarWithLables2Distrib(against, pro, labels, "Country Sentiment per Day", rot=70)
 
 
 
 def main():
 
-    tweetIndex = createTweetIndex("/Users/muntean/refugees-output/refugees-with-final-new.json")
-    dailyTweetsMask = createDailyTweetsMask(tweetIndex)
-    userCountryTweetsMask = createUserCountryTweetsMask(tweetIndex)
-    print "Finished indexing tweets and creating masks"
+    # tweetIndex = createTweetIndex("/Users/muntean/refugees-output/refugees-with-final-new.json")
+    # dailyTweetsMask = createDailyTweetsMask(tweetIndex)
+    # userCountryTweetsMask = createUserCountryTweetsMask(tweetIndex)
+    # print "Finished indexing tweets and creating masks"
+    #
+    # # plotTweetsPerCountry(userCountryTweetsMask)
+    # # plotTweetsPerDay(dailyTweetsMask)
+    # # plotSentimentPerCountry(userCountryTweetsMask, userCountryTweetsMask)
+    # # plotSentimentPerDay(dailyTweetsMask, userCountryTweetsMask)
 
-    # plotTweetsPerCountry(userCountryTweetsMask)
-    # plotTweetsPerDay(dailyTweetsMask)
-    plotSentimentPerCountry(userCountryTweetsMask, userCountryTweetsMask)
-    # plotSentimentPerDay(dailyTweetsMask, userCountryTweetsMask)
+    ### plot country sentiment per day
+    countryIndex = stats_enriched_tweets.buildCountrySentiIndex("/Users/muntean/refugees-output/refugees-with-final-new.json")
+    print "finished building index", len(countryIndex)
+    # for country in countryIndex.keys():
+    #     plotCountrySentimentPerDay(countryIndex[country])
+    plotCountrySentimentPerDay(countryIndex["france"])
 
 
 if __name__ == '__main__':
