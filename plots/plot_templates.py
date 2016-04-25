@@ -111,6 +111,17 @@ def plotSubplot(ax, a,b, labels, title, rot=0):
     # autolabel(rects1)
     # autolabel(rects2)
 
+    # todo @@@@ from mauro
+    # plt.figure(figsize=(25,4))
+    # plt.plot(y)
+    # ax = subplot(111)
+    # #ax.set_xticks(range(len(y)), minor=True)
+    # ax.set_xticks(np.arange(len(x)))
+    # ax.set_xticklabels(x, rotation=45)
+    # ax.xaxis.grid()
+    # plt.title(i)
+    # plt.show()
+
 
 def plotCountrySentiment(countryIndex):
 

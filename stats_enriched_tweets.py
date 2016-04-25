@@ -55,7 +55,6 @@ def hasUserCountryAndUserSentiment(tweet):
     return ("sentiment_user" in tweet) and (tweet["final_location_c"])
 
 
-
 def hasUserCityAndUserSentiment(tweet):
     # is the sentiment of the tweet or the sentiment of a user?
     """
