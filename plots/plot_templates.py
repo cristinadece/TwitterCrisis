@@ -78,9 +78,9 @@ def plotBarWithLables2Distrib(a,b, labels, title, rot=0):
 
     plt.show()
 
-    # # plt.show()
+
     # plt.tight_layout()
-    # plt.savefig("/tmp/midsomma2-hour.pdf")
+    # plt.savefig("/Users/muntean/Google\ Drive/plotsCris/" + title + ".png")
 
 
 def plotSubplot(ax, a,b, labels, title, rot=0):

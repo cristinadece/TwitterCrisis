@@ -250,10 +250,11 @@ def createDayIndex(filename):
     return dayIndex
 
 
-def buildCountrySentiIndex(filename, location_field_name, senti_field_name):
+def buildCountrySentiIndexMention(filename):
     """
     The structure is a dictionary < location : dictionary <date, [list of sentiments - repeating e.g. 0,1,1,0,1 ...]> >
     :param filename:
+    :param location_field_name:
     :return:
     """
     countryIndex = defaultdict(lambda : defaultdict(list))
@@ -261,29 +262,49 @@ def buildCountrySentiIndex(filename, location_field_name, senti_field_name):
     i = 0
     for tweet in tweetsAsDict:
         i += 1
-        if tweet[location_field_name] and senti_field_name in tweet:
-            countries = tweet[location_field_name]
+        if tweet["text_location_mentions_c"] and "sentiment_tweet" in tweet:
+            countries = tweet["text_location_mentions_c"]
             day = tweet["day"]
-            sentiment = tweet[senti_field_name]
-            if senti_field_name == "sentiment_tweet":
-                if sentiment == "pro_ref":
-                    senti = 1
-                else:
-                    senti = 0
+            sentiment = tweet["sentiment_tweet"]
+            if sentiment == "pro_ref":
+                senti = 1
+            else:
+                senti = 0
             for country in countries:
                 countryIndex[country][day].append(senti)
+
+    return countryIndex
+
+
+def buildCountrySentiIndexUser(filename):
+    """
+    The structure is a dictionary < location : dictionary <date, [list of sentiments - repeating e.g. 0,1,1,0,1 ...]> >
+    :param filename:
+    :param location_field_name:
+    :return:
+    """
+    countryIndex = defaultdict(lambda : defaultdict(list))
+    tweetsAsDict = tweetIter(filename)
+    i = 0
+    for tweet in tweetsAsDict:
+        i += 1
+        if tweet["final_location_c"] and "sentiment_user" in tweet:
+            country = tweet["final_location_c"]  # this is a string not a list
+            day = tweet["day"]
+            sentiment = tweet["sentiment_user"]
+
+            countryIndex[country][day].append(sentiment)  # this is already 0 o 1
 
         # if i % 30000 == 0:
         #     # print i
         #     break
     return countryIndex
 
-
 def main():
 
     # countSimple("/Users/muntean/refugees-output/refugees-with-final-new.json")
-    loc_mentions = buildCountrySentiIndex("/Users/muntean/refugees-output/refugees-with-final-new.json", "text_location_mentions_c", "sentiment_tweet")
-    user_loc = buildCountrySentiIndex("/Users/muntean/refugees-output/refugees-with-final-new.json", "final_location_c", "sentiment_user")
+    loc_mentions = buildCountrySentiIndexMention("/Users/muntean/refugees-output/refugees-with-final-new.json")
+    user_loc = buildCountrySentiIndexUser("/Users/muntean/refugees-output/refugees-with-final-new.json")
     # print uu
 
 if __name__ == '__main__':
