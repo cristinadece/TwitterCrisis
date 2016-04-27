@@ -300,12 +300,56 @@ def buildCountrySentiIndexUser(filename):
         #     break
     return countryIndex
 
+
+
+def buildMixCountryMentionUserSenti(filename):
+    """
+    The structure is a dictionary < location : dictionary <date, [list of sentiments - repeating e.g. 0,1,1,0,1 ...]> >
+    :param filename:
+    :param location_field_name:
+    :return:
+    """
+    countryIndex = defaultdict(lambda: defaultdict(set))
+    user_class = defaultdict()
+    tweetsAsDict = tweetIter(filename)
+    i = 0
+    for tweet in tweetsAsDict:
+        i += 1
+        if tweet["text_location_mentions_c"] and "sentiment_user" in tweet:
+            countries = tweet["text_location_mentions_c"]  # this is a string not a list
+            day = tweet["day"]
+            sentiment = tweet["sentiment_user"]
+            user_id = tweet["user_id"]
+            user_class[user_id] = sentiment  # pos, neg users
+            for country in countries:
+                countryIndex[country][day].add(user_id)  # this is the user_id
+
+        # if i % 30000 == 0:
+        #     # print i
+        #     break
+    print "finished step 1"
+
+    new_countryIndex = defaultdict(lambda: defaultdict(list))
+    for country, dayDict in countryIndex.iteritems():
+        for day, uniq_users in dayDict.iteritems():
+            unique_user_senti_list = list()
+            for user in uniq_users:
+                unique_user_senti_list.append(user_class[user])
+            new_countryIndex[country][day].extend(unique_user_senti_list)
+
+    print "finished step 2"
+
+    return new_countryIndex
+
+
+
 def main():
 
-    # countSimple("/Users/muntean/refugees-output/refugees-with-final-new.json")
-    loc_mentions = buildCountrySentiIndexMention("/Users/muntean/refugees-output/refugees-with-final-new.json")
-    user_loc = buildCountrySentiIndexUser("/Users/muntean/refugees-output/refugees-with-final-new.json")
-    # print uu
+    # countSimple("/Users/muntean/refugees-output/Final2/refugees_all.json")
+    # loc_mentions = buildCountrySentiIndexMention("/Users/muntean/refugees-output/refugees-with-final-new.json")
+    # user_loc = buildCountrySentiIndexUser("/Users/muntean/refugees-output/refugees-with-final-new.json")
+    mix = buildMixCountryMentionUserSenti("/Users/muntean/refugees-output/Final2/refugees_all.json")
+    print mix["serbia"]
 
 if __name__ == '__main__':
     main()
