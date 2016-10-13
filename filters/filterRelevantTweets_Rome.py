@@ -128,17 +128,17 @@ if __name__ == '__main__':
 
     print "Stadio Olimpico"
     print "Num tweets: ", len(stadioOlimpico["tweets"])
-    print "Num users - uniq", len(stadioOlimpico["users"])
+    print "Num users - uniq", len(set(stadioOlimpico["users"]))
     print "----------------"
     print "Circo Massimo"
     print "Num tweets: ", len(circoMassimoDict["tweets"])
-    print "Num users - uniq", len(circoMassimoDict["users"])
+    print "Num users - uniq", len(set(circoMassimoDict["users"]))
     print "----------------"
     print "Piazza San Giovanni"
     print "Num tweets: ", len(piazzaSanGiovanniDict["tweets"])
-    print "Num users - uniq", len(piazzaSanGiovanniDict["users"])
+    print "Num users - uniq", len(set(piazzaSanGiovanniDict["users"]))
     print "----------------"
     print "Piazza San Pietro"
     print "Num tweets: ", len(piazzaSanPietroDict["tweets"])
-    print "Num users - uniq", len(piazzaSanPietroDict["users"])
+    print "Num users - uniq", len(set(piazzaSanPietroDict["users"]))
     print "----------------"
