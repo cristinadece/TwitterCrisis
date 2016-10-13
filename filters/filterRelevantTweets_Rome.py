@@ -109,8 +109,8 @@ if __name__ == '__main__':
             if (inBB(tweet_coords[0],tweet_coords[1])):
                 dumpDictValuesToFile(tweet, outputRelevant)
             if (inBB(tweet_coords[0],tweet_coords[1],stadioOlimpico)):
-                stadioOlimpico["tweets"].append(tweet["id_str"])
-                stadioOlimpico["users"].append(tweet["user"]["id_str"])
+                stadioOlimpicoDict["tweets"].append(tweet["id_str"])
+                stadioOlimpicoDict["users"].append(tweet["user"]["id_str"])
             if (inBB(tweet_coords[0],tweet_coords[1],circoMassimo)):
                 circoMassimoDict["tweets"].append(tweet["id_str"])
                 circoMassimoDict["users"].append(tweet["user"]["id_str"])
