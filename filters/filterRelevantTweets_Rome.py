@@ -126,6 +126,7 @@ if __name__ == '__main__':
             
     outputRelevant.close()
 
+    print inputFile
     print "Stadio Olimpico"
     print "Num tweets: ", len(stadioOlimpico["tweets"])
     print "Num users - uniq", len(set(stadioOlimpico["users"]))
@@ -142,3 +143,4 @@ if __name__ == '__main__':
     print "Num tweets: ", len(piazzaSanPietroDict["tweets"])
     print "Num users - uniq", len(set(piazzaSanPietroDict["users"]))
     print "----------------"
+    print
