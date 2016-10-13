@@ -9,9 +9,15 @@ from twitter.Tweet import Tweet
 
 '''
 This is for geotagged raw JSON tweets
+
+we count the number of tweets and the number of users
 '''
 
 romeBB = [tuple([12.341707, 41.769596]), tuple([12.626724, 42.01002])]
+stadioOlimpico = [tuple([12.449897, 41.926534]), tuple([12.461527, 41.936048])]
+circoMassimo = [tuple([12.481765, 41.883170]), tuple([12.489329, 41.888593])]
+piazzaSanPietro = [tuple([12.455789, 41.901337]), tuple([12.458503, 41.903429])]
+piazzaSanGiovanni = [tuple([12.505771, 41.885228]), tuple([12.508807, 41.887391])]
 
 def inBB(lon, lat, boundingbox=romeBB):
     """
@@ -87,6 +93,11 @@ if __name__ == '__main__':
     inputFile = sys.argv[1]
     outputRelevant = codecs.open(sys.argv[2], "w", "utf-8")
 
+    stadioOlimpicoDict = defaultdict(list)
+    circoMassimoDict = defaultdict(list)
+    piazzaSanGiovanniDict = defaultdict(list)
+    piazzaSanPietroDict = defaultdict(list)
+
 
     # print htDict
     tweetsAsDict = Tweet.getTweetAsDictionary(inputFile)
@@ -95,9 +106,39 @@ if __name__ == '__main__':
     for tweet in tweetsAsDict:
         if tweet["coordinates"] is not None:
             tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
-            if (inBB(tweet_coords[0], tweet_coords[1])):
+            if (inBB(tweet_coords[0],tweet_coords[1])):
                 dumpDictValuesToFile(tweet, outputRelevant)
+            if (inBB(tweet_coords[0],tweet_coords[1],stadioOlimpico)):
+                stadioOlimpico["tweets"].append(tweet["id_str"])
+                stadioOlimpico["users"].append(tweet["user"]["id_str"])
+            if (inBB(tweet_coords[0],tweet_coords[1],circoMassimo)):
+                circoMassimoDict["tweets"].append(tweet["id_str"])
+                circoMassimoDict["users"].append(tweet["user"]["id_str"])
+            if (inBB(tweet_coords[0],tweet_coords[1],piazzaSanGiovanni)):
+                piazzaSanGiovanniDict["tweets"].append(tweet["id_str"])
+                piazzaSanGiovanniDict["users"].append(tweet["user"]["id_str"])
+            if (inBB(tweet_coords[0],tweet_coords[1],piazzaSanPietro)):
+                piazzaSanPietroDict["tweets"].append(tweet["id_str"])
+                piazzaSanPietroDict["users"].append(tweet["user"]["id_str"])
+
         else:
             tweet_coords = None
             
     outputRelevant.close()
+
+    print "Stadio Olimpico"
+    print "Num tweets: ", len(stadioOlimpico["tweets"])
+    print "Num users - uniq", len(stadioOlimpico["users"])
+    print "----------------"
+    print "Circo Massimo"
+    print "Num tweets: ", len(circoMassimoDict["tweets"])
+    print "Num users - uniq", len(circoMassimoDict["users"])
+    print "----------------"
+    print "Piazza San Giovanni"
+    print "Num tweets: ", len(piazzaSanGiovanniDict["tweets"])
+    print "Num users - uniq", len(piazzaSanGiovanniDict["users"])
+    print "----------------"
+    print "Piazza San Pietro"
+    print "Num tweets: ", len(piazzaSanPietroDict["tweets"])
+    print "Num users - uniq", len(piazzaSanPietroDict["users"])
+    print "----------------"
