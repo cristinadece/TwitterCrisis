@@ -75,6 +75,26 @@ class Tweet:
                 yield tweet
 
 
+    @staticmethod
+    def getTweetAsDictionaryNoGZ(path):
+        if os.path.isdir(path):
+             for fname in os.listdir(path):
+                for line in open(os.path.join(path, fname)):
+                    try:
+                        tweet = json.loads(line)
+                    except:
+                        print "Couldn't parse tweet: ", line[:200]
+                    yield tweet, fname
+        else:
+            print "Opening file: ", path
+            for line in open(path):
+                try:
+                    tweet = json.loads(line)
+                except:
+                    print "Couldn't parse tweet: ", line[:200]
+                yield tweet
+
+
 if __name__ == '__main__':
     #print stopwords
 

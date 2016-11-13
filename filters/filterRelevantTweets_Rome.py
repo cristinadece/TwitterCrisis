@@ -84,7 +84,7 @@ def dumpDictValuesToFile(tweet, file):
     file.write(line)
 
 if __name__ == '__main__':
-    logger = logging.getLogger("filterRelevantTweetsFM.py")
+    logger = logging.getLogger("filterRelevantTweets_Rome.py")
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 
     if len(sys.argv) != 3:
@@ -100,18 +100,47 @@ if __name__ == '__main__':
 
 
     # print htDict
-    tweetsAsDict = Tweet.getTweetAsDictionary(inputFile)
+    tweetsAsDict = Tweet.getTweetAsDictionaryNoGZ(inputFile)
+    currentFilename = ""
 
     i = 0
-    for tweet in tweetsAsDict:
+    for tweet, fname in tweetsAsDict:
+        if fname not in currentFilename:
+            print currentFilename
+            if currentFilename is not "":
+                print "Stadio Olimpico"
+                print "Num tweets: ", len(stadioOlimpicoDict["tweets"])
+                print "Num users - uniq", len(set(stadioOlimpicoDict["users"]))
+                print "----------------"
+                print "Circo Massimo"
+                print "Num tweets: ", len(circoMassimoDict["tweets"])
+                print "Num users - uniq", len(set(circoMassimoDict["users"]))
+                print "----------------"
+                print "Piazza San Giovanni"
+                print "Num tweets: ", len(piazzaSanGiovanniDict["tweets"])
+                print "Num users - uniq", len(set(piazzaSanGiovanniDict["users"]))
+                print "----------------"
+                print "Piazza San Pietro"
+                print "Num tweets: ", len(piazzaSanPietroDict["tweets"])
+                print "Num users - uniq", len(set(piazzaSanPietroDict["users"]))
+                print "----------------"
+                print
+            currentFilename = fname
+            stadioOlimpicoDict.clear()
+            circoMassimoDict.clear()
+            piazzaSanGiovanniDict.clear()
+            piazzaSanPietroDict.clear()
+
         if tweet["coordinates"] is not None:
             tweet_coords = tweet['coordinates']['coordinates']  # returns a list [longitude, latitude]
             if (inBB(tweet_coords[0],tweet_coords[1])):
                 dumpDictValuesToFile(tweet, outputRelevant)
+                i += 1
             if (inBB(tweet_coords[0],tweet_coords[1],stadioOlimpico)):
                 stadioOlimpicoDict["tweets"].append(tweet["id_str"])
                 stadioOlimpicoDict["users"].append(tweet["user"]["id_str"])
             if (inBB(tweet_coords[0],tweet_coords[1],circoMassimo)):
+                print tweet["text"]
                 circoMassimoDict["tweets"].append(tweet["id_str"])
                 circoMassimoDict["users"].append(tweet["user"]["id_str"])
             if (inBB(tweet_coords[0],tweet_coords[1],piazzaSanGiovanni)):
@@ -123,24 +152,26 @@ if __name__ == '__main__':
 
         else:
             tweet_coords = None
+
+    print "All tweets in Rome in July", i
             
     outputRelevant.close()
 
-    print inputFile
-    print "Stadio Olimpico"
-    print "Num tweets: ", len(stadioOlimpico["tweets"])
-    print "Num users - uniq", len(set(stadioOlimpico["users"]))
-    print "----------------"
-    print "Circo Massimo"
-    print "Num tweets: ", len(circoMassimoDict["tweets"])
-    print "Num users - uniq", len(set(circoMassimoDict["users"]))
-    print "----------------"
-    print "Piazza San Giovanni"
-    print "Num tweets: ", len(piazzaSanGiovanniDict["tweets"])
-    print "Num users - uniq", len(set(piazzaSanGiovanniDict["users"]))
-    print "----------------"
-    print "Piazza San Pietro"
-    print "Num tweets: ", len(piazzaSanPietroDict["tweets"])
-    print "Num users - uniq", len(set(piazzaSanPietroDict["users"]))
-    print "----------------"
-    print
+    # print inputFile
+    # print "Stadio Olimpico"
+    # print "Num tweets: ", len(stadioOlimpicoDict["tweets"])
+    # print "Num users - uniq", len(set(stadioOlimpicoDict["users"]))
+    # print "----------------"
+    # print "Circo Massimo"
+    # print "Num tweets: ", len(circoMassimoDict["tweets"])
+    # print "Num users - uniq", len(set(circoMassimoDict["users"]))
+    # print "----------------"
+    # print "Piazza San Giovanni"
+    # print "Num tweets: ", len(piazzaSanGiovanniDict["tweets"])
+    # print "Num users - uniq", len(set(piazzaSanGiovanniDict["users"]))
+    # print "----------------"
+    # print "Piazza San Pietro"
+    # print "Num tweets: ", len(piazzaSanPietroDict["tweets"])
+    # print "Num users - uniq", len(set(piazzaSanPietroDict["users"]))
+    # print "----------------"
+    # print
