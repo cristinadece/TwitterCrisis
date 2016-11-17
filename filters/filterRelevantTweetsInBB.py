@@ -146,6 +146,44 @@ def filterRelevanceNoBB(allHtList, tweet):
     return tweetDict
 
 
+# the extension for brexit tweets
+def filterRelevanceBrexit(tweet):
+    """
+    We remove relevance filter for all Hashtags since they are already prefiltered.
+    At this point we just want the new fields like: tweet_coords, tweet_place_city, tweet_place_country,
+    tweet_place_country_code and tokenized text
+    :param tweet:
+    :return:
+    """
+    tweetDict = dict()
+    tweetText = tweet["text"]
+    tweetTextTokens = Tweet.tokenizeTweetText(tweetText)
+
+
+    tweetDict["id_str"] = tweet["id_str"]
+    tweetDict["text"] = tweetText
+    tweetDict["tokenized_text"] = tweetTextTokens
+    tweetDict["hashtags"] = tweet["entities"]["hashtags"]
+
+    tweetDict["created_at"] = tweet["created_at"]
+
+    tweetDict["user_id"] = tweet["user"]["id_str"]
+    tweetDict["screen_name"] = tweet["user"]["screen_name"]
+
+    tweet_coords, tweet_place_city, tweet_place_country, tweet_place_country_code, user_location = getLocationData(tweet)
+    tweetDict["user_location"] = user_location
+
+
+    tweetDict["place"] = tweet["place"]
+    tweetDict["tweet_coords"] = tweet_coords
+    tweetDict["tweet_place_city"] = tweet_place_city
+    tweetDict["tweet_place_country"] = tweet_place_country
+    tweetDict["tweet_place_country_code"] = tweet_place_country_code
+
+
+    return tweetDict
+
+
 def dumpDictValuesToFile(dict, file):
     line = json.dumps(dict) + "\n"
     file.write(line)
@@ -168,7 +206,7 @@ if __name__ == '__main__':
 
     i = 0
     for tweet in tweetsAsDict:
-        relevantTweetDict = filterRelevanceNoBB(htDict["All"], tweet)
+        relevantTweetDict = filterRelevanceBrexit(tweet)
         if bool(relevantTweetDict):  # the dict is not empty
             dumpDictValuesToFile(relevantTweetDict, outputRelevant)
     outputRelevant.close()
