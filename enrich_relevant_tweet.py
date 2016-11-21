@@ -37,6 +37,11 @@ def addUserExLocation(tweet, euroCities, euroCountries):
     :param euroCountries:
     :return:
     """
+
+    #### brexit data fix!!!
+    if tweet["user_location"] is None:
+        tweet["user_location"] = ""
+
     potentialCities, potentialCountries, us = locationsInTweets.getUserLocation(tweet["user_location"], euroCities, euroCountries)
     country_codes = set()
 
