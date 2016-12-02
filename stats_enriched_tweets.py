@@ -301,7 +301,6 @@ def buildCountrySentiIndexUser(filename):
     return countryIndex
 
 
-
 def buildMixCountryMentionUserSenti(filename):
     """
     The structure is a dictionary < location : dictionary <date, [list of sentiments - repeating e.g. 0,1,1,0,1 ...]> >
@@ -345,11 +344,11 @@ def buildMixCountryMentionUserSenti(filename):
 
 def main():
 
-    # countSimple("/Users/muntean/refugees-output/Final2/refugees_all.json")
+    countSimple("/Users/cris/all-brexit-with-sent-lines.json")
     # loc_mentions = buildCountrySentiIndexMention("/Users/muntean/refugees-output/refugees-with-final-new.json")
     # user_loc = buildCountrySentiIndexUser("/Users/muntean/refugees-output/refugees-with-final-new.json")
-    mix = buildMixCountryMentionUserSenti("/Users/muntean/refugees-output/Final2/refugees_all.json")
-    print mix["serbia"]
+    # mix = buildMixCountryMentionUserSenti("/Users/muntean/refugees-output/Final2/refugees_all.json")
+    # print mix["serbia"]
 
 if __name__ == '__main__':
     main()

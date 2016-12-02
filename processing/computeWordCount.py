@@ -74,7 +74,7 @@ if __name__ == '__main__':
     tweetDir = sys.argv[1]
     output = sys.argv[2]
 
-    tweetsAsTokens = Tweet.getTweetAsTweetTextTokens(tweetDir)
+    tweetsAsTokens = Tweet.getTweetAsTweetTextTokensNoGZ(tweetDir)
 
     sorted_wordcount = wordcountPlain(tweetsAsTokens, False, 2)
     # printTSV(sorted_wordcount, output)

@@ -85,6 +85,15 @@ def loadHashtags():
     return htDict
 
 
+def loadBrexitHashtags():
+    htList = list()
+    with open("../resources/all-brexit-wc-top200.txt") as f:
+        for line in f:
+            hashtag = line.split("\t")[0]
+            htList.append(hashtag)
+    return htList
+
+
 # mauro
 # lowercase, tokenization from util - keep everything coherent
 # fields: user_id, screen_name, text, data, id tweet, entities: dict{coord, location, user, hashtags}
@@ -146,7 +155,7 @@ def filterRelevanceNoBB(allHtList, tweet):
     return tweetDict
 
 
-# the extension for brexit tweets
+# the extension for brexit tweets from GATE, @useless
 def filterRelevanceBrexit(tweet):
     """
     We remove relevance filter for all Hashtags since they are already prefiltered.
@@ -200,13 +209,13 @@ if __name__ == '__main__':
     outputRelevant = codecs.open(sys.argv[2], "w", "utf-8")
 
 
-    htDict = loadHashtags()
-    # print htDict
+    htList = loadBrexitHashtags()
+    # print len(htList)
     tweetsAsDict = Tweet.getTweetAsDictionary(inputFile)
 
     i = 0
     for tweet in tweetsAsDict:
-        relevantTweetDict = filterRelevanceBrexit(tweet)
+        relevantTweetDict = filterRelevanceNoBB(htList, tweet)
         if bool(relevantTweetDict):  # the dict is not empty
             dumpDictValuesToFile(relevantTweetDict, outputRelevant)
     outputRelevant.close()

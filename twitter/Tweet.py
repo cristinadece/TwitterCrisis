@@ -53,6 +53,30 @@ class Tweet:
                     tokenList = Tweet.tokenizeTweetText(tweetText)
                     yield tokenList
 
+    @staticmethod
+    def getTweetAsTweetTextTokensNoGZ(path):
+
+        if os.path.isdir(path):
+            for fname in os.listdir(path):
+                for line in open(os.path.join(path, fname)):
+                    try:
+                        tweet = json.loads(line)
+                    except:
+                        print "Couldn't parse tweet: ", line[:200]
+
+                    tweetText = tweet['text']
+                    tokenList = Tweet.tokenizeTweetText(tweetText)
+                    yield tokenList
+        else:  # this means it is a file
+            for line in open(path):
+                try:
+                    tweet = json.loads(line)
+                except:
+                    print "Couldn't parse tweet: ", line[:200]
+
+                tweetText = tweet['text']
+                tokenList = Tweet.tokenizeTweetText(tweetText)
+                yield tokenList
 
 
     @staticmethod
