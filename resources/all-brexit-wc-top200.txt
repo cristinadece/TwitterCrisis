@@ -19,36 +19,21 @@ foreign secretary	45147
 #euref	45047
 jeremy hunt	40129
 #voteleave	39756
-london	36814
-europe	36323
 sturgeon	35902
-petition	35887
 #remain	34308
 mps	33456
 #eu	33304
 article 50	32024
 tory	30840
 debate	29071
-election	29024
-bbc	28426
-el brexit	27660
-campaign	26113
-european	26029
-new prime	25944
-minister theresa	25808
 david davis	25141
 england	25063
-queen	25021
-downing	24913
-merkel	24492
 nicola sturgeon	23815
-parliament	23549
 new pm	23435
 osborne	23261
 nhs	22397
 owen smith	22269
 tories	22019
-trump	21793
 #corbyn	21775
 #uk	21436
 downing street	21278
@@ -75,7 +60,6 @@ cameron	1
 #cameron	1
 farage	1
 #farage	1
-establishment	1
 #strongerin	1
 #beleave	1
 #loveeuropeleaveeu	1
