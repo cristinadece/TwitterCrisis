@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CORES=16
+CORES=17
 INPUT_DIR=/home/muntean/brexit-rojo/
 OUTPUT_DIR=/home/muntean/brexit-filtered
 COMMAND="time python ../filters/filterRelevantTweetsInBB.py"
