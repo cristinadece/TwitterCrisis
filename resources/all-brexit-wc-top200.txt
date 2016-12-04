@@ -2,8 +2,6 @@ brexit	1090028
 #brexit	497789
 cameron	328740
 corbyn	270131
-vote	168307
-minister	162234
 labour	156682
 britain	114269
 referendum	106448
@@ -17,7 +15,6 @@ boris johnson	68616
 post-brexit	61473
 eu referendum	55038
 scotland	52550
-voted	50114
 foreign secretary	45147
 #euref	45047
 jeremy hunt	40129
@@ -26,7 +23,7 @@ london	36814
 europe	36323
 sturgeon	35902
 petition	35887
-remain	34308
+#remain	34308
 mps	33456
 #eu	33304
 article 50	32024
@@ -35,8 +32,6 @@ debate	29071
 election	29024
 bbc	28426
 el brexit	27660
-voting	27393
-voters	27134
 campaign	26113
 european	26029
 new prime	25944
@@ -45,9 +40,7 @@ david davis	25141
 england	25063
 queen	25021
 downing	24913
-brexit means	24652
 merkel	24492
-brexit minister	23952
 nicola sturgeon	23815
 parliament	23549
 new pm	23435
@@ -63,7 +56,6 @@ downing street	21278
 #brexiters	1
 remain	1
 #remain	1
-leave	1
 #leave	1
 #yeseu	1
 #voteremain	1
