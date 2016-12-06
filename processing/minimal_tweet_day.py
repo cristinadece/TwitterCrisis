@@ -16,7 +16,7 @@ import stats_enriched_tweets
 def main():
     # take params
     if len(sys.argv) != 3:
-        print "You need to pass the following 3 params: <enriched-tweets> <minimal print>"
+        print "You need to pass the following 2 params: <enriched-tweets> <minimal print>"
         sys.exit(-1)
     inputFile = sys.argv[1]
     outputUser = sys.argv[2]
@@ -31,7 +31,7 @@ def main():
             clean_tweet_text = tweet["text"].replace("\t", "")
             ht = ",".join(tweet["ht"])
             day = tweet["day"]
-            line = "\t".join([clean_tweet_text, ht, day])
+            line = "\t".join([clean_tweet_text, ht, str(day)])
             output_file.write(line + "\n")
 
 
