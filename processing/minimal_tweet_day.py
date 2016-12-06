@@ -28,7 +28,7 @@ def main():
     with open(outputUser, 'w') as output_file:
         i += 1
         for tweet in tweetIterator:
-            clean_tweet_text = tweet["text"].replace("\t", "")
+            clean_tweet_text = tweet["text"].replace("\t", "").replace("\n","")
             ht = ",".join(tweet["ht"])
             day = tweet["day"]
             line = "\t".join([clean_tweet_text, ht, str(day)])
