@@ -15,7 +15,7 @@ import stats_enriched_tweets
 
 def main():
     # take params
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print "You need to pass the following 3 params: <enriched-tweets> <minimal print>"
         sys.exit(-1)
     inputFile = sys.argv[1]
