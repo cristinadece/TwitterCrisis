@@ -94,6 +94,15 @@ def loadBrexitHashtags():
     return htList
 
 
+def loadRefugeeHashtags():
+    htList = list()
+    with open("../resources/all-brexit-wc-top200.txt") as f:
+        for line in f:
+            hashtag = line.replace("\n", "")
+            htList.append(hashtag)
+    return htList
+
+
 # mauro
 # lowercase, tokenization from util - keep everything coherent
 # fields: user_id, screen_name, text, data, id tweet, entities: dict{coord, location, user, hashtags}
